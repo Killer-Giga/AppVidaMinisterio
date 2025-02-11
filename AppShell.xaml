@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="AppVidaMinisterio.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:AppVidaMinisterio.Views"
+    Shell.FlyoutBehavior="Flyout"
+    Title="AppVidaMinisterio">
+
+    <Shell.FlyoutHeader>
+        <Grid HeightRequest="100"
+              BackgroundColor="Black">
+            <Image Source="dotnet_bot.png"/>
+        </Grid>
+    </Shell.FlyoutHeader>
+    
+    <ShellContent Title="Home" 
+                  ContentTemplate="{DataTemplate local:PrincipalView}"/>
+    <ShellContent Title="Prueba"
+                  ContentTemplate="{DataTemplate local:Prueba}"/>
+</Shell>
