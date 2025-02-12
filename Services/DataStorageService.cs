@@ -21,7 +21,7 @@ namespace AppVidaMinisterio.Services
 
         public DataStorageService() { }
 
-        public DataStorageService(List<Semana> semanas) 
+        public DataStorageService(List<Semana> semanas)
         {
             if (!File.Exists(path))
             {
@@ -32,11 +32,10 @@ namespace AppVidaMinisterio.Services
 
         public async Task LeerJsonAsync(List<Semana>? semanas)
         {
-            //  Error hay que arreglarlo
-            string json = await File.ReadAllTextAsync(path);
-            if (json != null)
+            if (File.Exists(path))
             {
-                semanas = await JsonSerializer.DeserializeAsync<List<Semana>>(json);
+                using FileStream fs = File.OpenRead(path);
+                semanas = await JsonSerializer.DeserializeAsync<List<Semana>>(fs);
             }
         }
     }
