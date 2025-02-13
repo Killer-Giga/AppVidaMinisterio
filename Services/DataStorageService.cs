@@ -30,13 +30,14 @@ namespace AppVidaMinisterio.Services
             }
         }
 
-        public async Task LeerJsonAsync(List<Semana>? semanas)
+        public async Task<List<Semana>> LeerJsonAsync()
         {
             if (File.Exists(path))
             {
                 using FileStream fs = File.OpenRead(path);
-                semanas = await JsonSerializer.DeserializeAsync<List<Semana>>(fs);
+                return await JsonSerializer.DeserializeAsync<List<Semana>>(fs) ?? new List<Semana>();
             }
+            return new List<Semana>();
         }
     }
 }

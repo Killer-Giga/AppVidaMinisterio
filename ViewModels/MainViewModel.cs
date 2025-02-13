@@ -50,7 +50,6 @@ namespace AppVidaMinisterio.ViewModels
 
         public async Task InitializeAsync()
         {
-            // No sirve :( debo empezar a subir en git hub para evitar echar a perder mi proyecto
             string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "semanas.json");
             if (!File.Exists(path))
             {
@@ -60,7 +59,7 @@ namespace AppVidaMinisterio.ViewModels
             else
             {
                 DataStorageService dataStorageService = new DataStorageService();
-                await dataStorageService.LeerJsonAsync(semanas);
+                semanas = await dataStorageService.LeerJsonAsync();
                 SemanaActual = semanas[0];
             }
                 _numeroDeSemanaArray = ObtenerSemanaActual();
