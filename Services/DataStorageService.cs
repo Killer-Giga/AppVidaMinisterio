@@ -8,7 +8,7 @@ namespace AppVidaMinisterio.Services
         // Clase para guardar las semanas en json
 
         /*
-         Recibe la semana generada en WebScrapingService y la agrega a un json.
+         Recibe la List<Semana> y la agrega a un json.
          Estas semanas se acumulan en el mismo archivo y se van agregando mas al final de este.
          Además esta clase debe contar con la manera de editar el json según la _semanaActual en los entry y editor que hay por semana para actualizar 
         los nombres en las asignaciones. Esto se debe hacer automáticamente cuando haya algún cambio. 
@@ -17,27 +17,22 @@ namespace AppVidaMinisterio.Services
         ya guardadas en el archivo. Por ejemplo si tengo los 2 meses proximos ya guardados no debe actualizarlos de nuevo porque podria borrar las semanas ya editadas.
         */
 
-        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "semanas.json");
+        public string PathStorage { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "semanas.json");
 
-        public DataStorageService() { }
-
-        public DataStorageService(List<Semana> semanas)
+        public async Task<List<Semana>> ReadJsonAsync()
         {
-            if (!File.Exists(path))
+            if (File.Exists(PathStorage))
             {
-                string json = JsonSerializer.Serialize(semanas);
-                File.WriteAllText(path, json);
-            }
+                using FileStream fs = File.OpenRead(PathStorage);
+                return await JsonSerializer.DeserializeAsync<List<Semana>>(fs) ?? new List<Semana>();
+            }           
+            return new List<Semana>();
         }
 
-        public async Task<List<Semana>> LeerJsonAsync()
+        public void SaveJson(List<Semana> semanas)
         {
-            if (File.Exists(path))
-            {
-                using FileStream fs = File.OpenRead(path);
-                return await JsonSerializer.DeserializeAsync<List<Semana>>(fs) ?? new List<Semana>();
-            }
-            return new List<Semana>();
+            string json = JsonSerializer.Serialize(semanas);
+            File.WriteAllText(PathStorage, json);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace AppVidaMinisterio.ViewModels
         public ICommand AnteriorComand { get; }
 
         // Variables y propiedades para las semanas
+        DataStorageService dataStorageService = new DataStorageService();
         List<Semana> semanas = new List<Semana>();
         // Nota: Que pasa si el dispositivo no esta conectado a internet. Se necesita manejar esas excepciones
         private string _url = "https://wol.jw.org/es/wol/meetings/r4/lp-s/2025/00";
@@ -50,16 +51,16 @@ namespace AppVidaMinisterio.ViewModels
 
         public async Task InitializeAsync()
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "semanas.json");
-            if (!File.Exists(path))
+            // Al inciar la app se verifica si ya se han descargado las semanas. Si es asi se leen del archivo json.
+            if (!File.Exists(dataStorageService.PathStorage))
             {
                 await ObtenerSemanas();
                 SemanaActual = semanas[0];
             }
             else
             {
-                DataStorageService dataStorageService = new DataStorageService();
-                semanas = await dataStorageService.LeerJsonAsync();
+                semanas = await dataStorageService.ReadJsonAsync();
+                // No puede inicar con la primera semana de la list si no con la semana actual del año
                 SemanaActual = semanas[0];
             }
                 _numeroDeSemanaArray = ObtenerSemanaActual();
@@ -68,8 +69,12 @@ namespace AppVidaMinisterio.ViewModels
         // Métodos para las semanas
         private void SiguienteSemana()
         {
+            // Tienen Errores!!!!!!!!!!! Al dar siguiente avanza varias semanas a la vez
+            // es porque esta detectando la semana actual del dispositvo y a esta le agrega mas 1 y por eso el salto grande
+            // _numeroDeSemanaArray = ObtenerSemanaActual(); es el problema
             _numeroDeSemanaArray++;
-            if (semanas[_numeroDeSemanaArray].SemanaFecha == null)
+            dataStorageService.SaveJson(semanas);
+            if (_numeroDeSemanaArray >= semanas.Count)
                 _numeroDeSemanaArray--;
             else
                 SemanaActual = semanas[_numeroDeSemanaArray];
@@ -78,7 +83,8 @@ namespace AppVidaMinisterio.ViewModels
         private void AnteriorSemana()
         {
             _numeroDeSemanaArray--;
-            if (semanas[_numeroDeSemanaArray].SemanaFecha == null)
+            dataStorageService.SaveJson(semanas);
+            if (_numeroDeSemanaArray < 0)
                 _numeroDeSemanaArray++;
             else
                 SemanaActual = semanas[_numeroDeSemanaArray];
@@ -102,7 +108,7 @@ namespace AppVidaMinisterio.ViewModels
                 semanas.Add(semana);
                 numeroDeSemanaActual++;
             }
-            DataStorageService dataStorageService = new DataStorageService(semanas);
+            dataStorageService.SaveJson(semanas);
         }
 
         private int ObtenerSemanaActual()
