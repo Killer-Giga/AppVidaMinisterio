@@ -14,6 +14,7 @@ namespace AppVidaMinisterio.ViewModels
         // Comandos
         public ICommand SiguienteComand { get; }
         public ICommand AnteriorComand { get; }
+        public ICommand GuardarComand { get; }
 
         // Variables y propiedades para las semanas
         DataStorageService dataStorageService = new DataStorageService();
@@ -47,6 +48,7 @@ namespace AppVidaMinisterio.ViewModels
         {
             SiguienteComand = new Command(SiguienteSemana);
             AnteriorComand = new Command(AnteriorSemana);
+            GuardarComand = new Command(GuardarCambios);
         }
 
         public async Task InitializeAsync()
@@ -90,6 +92,10 @@ namespace AppVidaMinisterio.ViewModels
                 SemanaActual = semanas[_numeroDeSemanaArray];
         }
 
+        private void GuardarCambios()
+        {
+            dataStorageService.SaveJson(semanas);
+        }
         // Este metodo es temporal es necesario otro enfoque para el proyecto final
         // porque es necesario que se descarguen las semanas la primera vez que se inicia la app
         // y despues de que el usuario presione un boton para descargar pero solo las semanas siguientes

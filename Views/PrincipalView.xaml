@@ -17,6 +17,10 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Guardar" Command="{Binding GuardarComand}"/>
+    </ContentPage.ToolbarItems>
+    
     <ScrollView>
         <Grid RowDefinitions="auto, auto, 30, auto, 30, auto, 30, auto, auto" ColumnDefinitions="auto,*,*">
 
