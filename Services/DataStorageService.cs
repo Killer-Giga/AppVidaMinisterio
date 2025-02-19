@@ -8,7 +8,7 @@ namespace AppVidaMinisterio.Services
         // Clase para guardar las semanas en json
 
         /*
-         Recibe la List<Semana> y la agrega a un json.
+         Recibe la Dictionary<int, Semana> y la agrega a un json.
          Estas semanas se acumulan en el mismo archivo y se van agregando mas al final de este.
          Además esta clase debe contar con la manera de editar el json según la _semanaActual en los entry y editor que hay por semana para actualizar 
         los nombres en las asignaciones. Esto se debe hacer automáticamente cuando haya algún cambio. 
@@ -19,17 +19,17 @@ namespace AppVidaMinisterio.Services
 
         public string PathStorage { get; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "semanas.json");
 
-        public async Task<List<Semana>> ReadJsonAsync()
+        public async Task<SortedDictionary<int, Semana>> ReadJsonAsync()
         {
             if (File.Exists(PathStorage))
             {
                 using FileStream fs = File.OpenRead(PathStorage);
-                return await JsonSerializer.DeserializeAsync<List<Semana>>(fs) ?? new List<Semana>();
+                return await JsonSerializer.DeserializeAsync<SortedDictionary<int, Semana>>(fs) ?? new SortedDictionary<int, Semana>();
             }           
-            return new List<Semana>();
+            return new SortedDictionary<int, Semana>();
         }
 
-        public void SaveJson(List<Semana> semanas)
+        public void SaveJson(SortedDictionary<int, Semana> semanas)
         {
             string json = JsonSerializer.Serialize(semanas);
             File.WriteAllText(PathStorage, json);

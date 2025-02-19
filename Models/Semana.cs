@@ -6,8 +6,9 @@
         public string? SemanaFecha { get; set; }
         public string? TextoBiblico { get; set; }
         public string? CancionInicio { get; set; }
-        public string? OradorInicial { get; set; }
-        public string? Presidente { get; set; }
+        public string? OradorInicial { get; set; } = "Oración inicial: ";
+        public string? Presidente { get; set; } = "Presidente: ";
+
         // TESOROS DE LA BIBLIA
         public string? TituloTesoros { get; set; }
         public string? OradorTesoros { get; set; }
@@ -16,6 +17,7 @@
 
         public string? DetallesLecturaBiblica { get; set; }
         public string? LectorBiblia { get; set; }
+
         // SEAMOS MEJORES MAESTROS
         public string? AsignacionMejoresMaestros1 { get; set; }
         public string? AsignadoMejoresMaestros1 { get; set; }
@@ -32,6 +34,7 @@
         public string? AsignacionMejoresMaestros4 { get; set; }
         public string? AsignadoMejoresMaestros4 { get; set; }
         public string? DetallesAsignacionMejoresMaestros4 { get; set; }
+
         // NUESTRA VIDA CRISTIANA
         public string? CancionIntermedio { get; set; }
 
@@ -43,11 +46,12 @@
         public string? AsignadoVidaCristiana2 { get; set; }
         public string? DetallesAsignacionVidaCristiana2 { get; set; }
 
-        public string? EstudioBiblico { get; set; }
-        public string? ConductorYLectorEstudioBiblico { get; set; }
+        public string? EstudioBiblico { get; set; } 
+        public string? ConductorYLectorEstudioBiblico { get; set; } = "Conductor: \nLector: ";
         public string? DetallesEstudioBiblico { get; set; }
+
         // FINAL
         public string? CancionFinal { get; set; }
-        public string? OradorFinal { get; set; }
+        public string? OradorFinal { get; set; } = "Oración final: ";
     }
 }

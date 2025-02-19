@@ -18,10 +18,14 @@ namespace AppVidaMinisterio.ViewModels
 
         // Variables y propiedades para las semanas
         DataStorageService dataStorageService = new DataStorageService();
-        List<Semana> semanas = new List<Semana>();
+        SortedDictionary<int, Semana> semanas = new SortedDictionary<int, Semana>();
+
         // Nota: Que pasa si el dispositivo no esta conectado a internet. Se necesita manejar esas excepciones
         private string _url = "https://wol.jw.org/es/wol/meetings/r4/lp-s/2025/00";
+
+        // Semana actual que se muestra en la app. Cambiar el nombre de la variable
         private int _numeroDeSemanaArray = 0;
+
         private Semana? _semanaActual;
         public Semana? SemanaActual
         {
@@ -54,29 +58,25 @@ namespace AppVidaMinisterio.ViewModels
         public async Task InitializeAsync()
         {
             // Al inciar la app se verifica si ya se han descargado las semanas. Si es asi se leen del archivo json.
+            _numeroDeSemanaArray = ObtenerSemanaActual();
             if (!File.Exists(dataStorageService.PathStorage))
             {
                 await ObtenerSemanas();
-                SemanaActual = semanas[0];
+                SemanaActual = semanas[_numeroDeSemanaArray];
             }
             else
             {
                 semanas = await dataStorageService.ReadJsonAsync();
-                // No puede inicar con la primera semana de la list si no con la semana actual del año
-                SemanaActual = semanas[0];
-            }
-                _numeroDeSemanaArray = ObtenerSemanaActual();
+                SemanaActual = semanas[_numeroDeSemanaArray];
+            }     
         }
 
         // Métodos para las semanas
         private void SiguienteSemana()
         {
-            // Tienen Errores!!!!!!!!!!! Al dar siguiente avanza varias semanas a la vez
-            // es porque esta detectando la semana actual del dispositvo y a esta le agrega mas 1 y por eso el salto grande
-            // _numeroDeSemanaArray = ObtenerSemanaActual(); es el problema
             _numeroDeSemanaArray++;
             dataStorageService.SaveJson(semanas);
-            if (_numeroDeSemanaArray >= semanas.Count)
+            if (!semanas.ContainsKey(_numeroDeSemanaArray))
                 _numeroDeSemanaArray--;
             else
                 SemanaActual = semanas[_numeroDeSemanaArray];
@@ -86,7 +86,7 @@ namespace AppVidaMinisterio.ViewModels
         {
             _numeroDeSemanaArray--;
             dataStorageService.SaveJson(semanas);
-            if (_numeroDeSemanaArray < 0)
+            if (!semanas.ContainsKey(_numeroDeSemanaArray))
                 _numeroDeSemanaArray++;
             else
                 SemanaActual = semanas[_numeroDeSemanaArray];
@@ -96,11 +96,14 @@ namespace AppVidaMinisterio.ViewModels
         {
             dataStorageService.SaveJson(semanas);
         }
+
         // Este metodo es temporal es necesario otro enfoque para el proyecto final
         // porque es necesario que se descarguen las semanas la primera vez que se inicia la app
         // y despues de que el usuario presione un boton para descargar pero solo las semanas siguientes
         public async Task ObtenerSemanas()
         {
+            // Hacer el metodo asincrónicos para que se descarguen las semanas mas rapido
+            // Ya no deberia de haber problema pues como se usara un SortedDictionary se ordenaran las semanas automaticamente
             int numeroDeSemanaActual = ObtenerSemanaActual();
             while (true)
             {   
@@ -111,7 +114,7 @@ namespace AppVidaMinisterio.ViewModels
                 {
                     break;
                 }
-                semanas.Add(semana);
+                semanas[numeroDeSemanaActual] = semana;
                 numeroDeSemanaActual++;
             }
             dataStorageService.SaveJson(semanas);

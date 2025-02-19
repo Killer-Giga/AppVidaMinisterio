@@ -200,7 +200,7 @@
 
                 <Entry x:Name="oradorFinal"
                        Text="{Binding SemanaActual.OradorFinal}"
-                       Placeholder="Oracion final: "
+                       Placeholder="Oración final: "
                        Grid.Row="0"
                        Grid.Column="2"/>
             </Grid>
