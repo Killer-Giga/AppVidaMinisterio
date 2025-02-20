@@ -5,7 +5,7 @@ namespace AppVidaMinisterio.Services
 {
     internal class WebScrapingService
     {
-        // Es clase llena al objeto Semana con la información obtenida de la url
+        // Esta clase llena al objeto Semana con la información obtenida de la url
         private enum Seccion
         {
             Ninguna,
@@ -14,18 +14,48 @@ namespace AppVidaMinisterio.Services
             VidaCristiana
         }
         private Seccion _seccionActual = Seccion.Ninguna;
+
+        private Semana Semana { get;}
+        private string Url { get; }
+        private static readonly HttpClient httpClient = new HttpClient();
         private bool _h3Valido = false;
         private bool _firstPNode = false;
 
-        private static readonly HttpClient httpClient = new HttpClient();
+        public WebScrapingService(Semana semana, string url)
+        {
+            Semana = semana;
+            Url = url;
+        }
 
-        public async Task WebScrappingService(string url, Semana semana)
+        public async Task<bool> HasValidContentAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await httpClient.GetAsync(Url);
+                response.EnsureSuccessStatusCode();
+                string htmlContent = await response.Content.ReadAsStringAsync();
+                var doc = new HtmlDocument();
+                doc.LoadHtml(htmlContent);
+                var h1Node = doc.DocumentNode.SelectSingleNode("//h1");
+                if (h1Node !=  null)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (HttpRequestException)
+            {
+                return false;
+            }
+        }
+
+        public async Task WebScraping()
         {
             try
             {
                 //Se inicializa el cliente http y se obtiene el contenido de la url
-                HttpResponseMessage response = await httpClient.GetAsync(url);
-
+                HttpResponseMessage response = await httpClient.GetAsync(Url);
+                response.EnsureSuccessStatusCode();
                 string htmlContent = await response.Content.ReadAsStringAsync();
                 var doc = new HtmlDocument();
                 doc.LoadHtml(htmlContent);
@@ -34,30 +64,26 @@ namespace AppVidaMinisterio.Services
                 var h2h3pNodes = doc.DocumentNode.SelectNodes("//h2 | //h3 | //p");
 
                 if (h1Node == null)
-                {
                     return;
-                }
                 else
-                {
-                    AsignarFecha(h1Node.InnerText, semana);
-                }
+                    AsignarFecha(h1Node.InnerText);
 
                 if (h2h3pNodes == null)
-                {
                     return;
-                }
                 else
-                {
-                    SelectorDeNodo(h2h3pNodes, semana);
-                }
+                    SelectorDeNodo(h2h3pNodes);
             }
             catch (InvalidOperationException ex)
             {
                 throw new InvalidOperationException("Error: ", ex);
             }
+            catch (HttpRequestException ex)
+            {
+                throw new HttpRequestException("Error: ", ex);
+            }
         }
 
-        private void SelectorDeNodo(HtmlNodeCollection h2h3pNodes, Semana semana)
+        private void SelectorDeNodo(HtmlNodeCollection h2h3pNodes)
         {
             // Itera en el nodo h2 y busca los nodos strong para buscar la sección y asignar las partes correspondientes
             // después itera en los nodos h3 que se encuentren entre los h2 para asignar los puntos de la reunión
@@ -89,9 +115,9 @@ namespace AppVidaMinisterio.Services
                                 default:
                                     if (numberH2 == 1)
                                     {
-                                        AsignarTextoBiblico(text, semana);
+                                        AsignarTextoBiblico(text);
                                     }
-                                    AsignarParte(node, semana);
+                                    AsignarParte(node);
                                     break;
                             }
                         }
@@ -99,27 +125,27 @@ namespace AppVidaMinisterio.Services
                 }
                 else if (node.Name == "h3")
                 {
-                    AsignarParte(node, semana);
+                    AsignarParte(node);
                     _firstPNode = true;
                 }
                 else if (node.Name == "p")
                 {
                     // Toma el nodo siguiente al h3 y asigna los detalles
                     if (_seccionActual == Seccion.Tesoros && _firstPNode && _h3Valido)
-                        AsignarDetallesNodoP(node.InnerText.Trim(), semana);
+                        AsignarDetallesNodoP(node.InnerText.Trim());
                     else if (_seccionActual == Seccion.MejoresMaestros && _firstPNode)
-                        AsignarDetallesNodoP(node.InnerText.Trim(), semana);
+                        AsignarDetallesNodoP(node.InnerText.Trim());
                     else if (_seccionActual == Seccion.VidaCristiana && _firstPNode && _h3Valido)
-                        AsignarDetallesNodoP(node.InnerText.Trim(), semana);
+                        AsignarDetallesNodoP(node.InnerText.Trim());
                     else if (_seccionActual == Seccion.Ninguna && _firstPNode && _h3Valido)
-                        AsignarDetallesNodoP(node.InnerText.Trim(), semana);
+                        AsignarDetallesNodoP(node.InnerText.Trim());
                     else
                         continue;
                 }
             }
         }
 
-        private void AsignarParte(HtmlNode node, Semana semana)
+        private void AsignarParte(HtmlNode node)
         {
             // itera en el nodo h3 y busca los nodos strong para buscar la parte a asignar en la semana y posteriormente llamar al metodo SeleccionarSeccion
             var strongNodes = node.SelectNodes(".//strong");
@@ -134,7 +160,7 @@ namespace AppVidaMinisterio.Services
                         var text = strongNode.InnerText.Trim();
                         textAcumulado += text;
                     }
-                    SeleccionarSeccion(textAcumulado, semana);
+                    SeleccionarSeccion(textAcumulado);
                 }
             }
             else
@@ -144,29 +170,29 @@ namespace AppVidaMinisterio.Services
                     foreach (var strongNode in strongNodes)
                     {
                         var text = strongNode.InnerText.Trim();
-                        SeleccionarSeccion(text, semana);
+                        SeleccionarSeccion(text);
                     }
                 }
             }
         }
 
-        private void SeleccionarSeccion(string text, Semana semana)
+        private void SeleccionarSeccion(string text)
         {
             // Selecciona la sección correspondiente segun el texto del <strong> y asigna el texto a la propiedad correspondiente
             if (text.Contains("Canción"))
-                AsignarCancion(text, semana);
+                AsignarCancion(text);
             else if (_seccionActual != Seccion.Ninguna)
             {
                 switch (_seccionActual)
                 {
                     case Seccion.Tesoros:
-                        AsignarTesorosDeLaBiblia(text, semana);
+                        AsignarTesorosDeLaBiblia(text);
                             break;
                     case Seccion.MejoresMaestros:
-                        AsignarMejoresMaestros(text, semana);
+                        AsignarMejoresMaestros(text);
                         break;
                     case Seccion.VidaCristiana:
-                        AsignarVidaCristiana(text, semana);
+                        AsignarVidaCristiana(text);
                         break;
                     default:
                         break;
@@ -174,11 +200,11 @@ namespace AppVidaMinisterio.Services
             }
         }
 
-        private void AsignarTesorosDeLaBiblia(string text, Semana semana)
+        private void AsignarTesorosDeLaBiblia(string text)
         {
-            if (semana.TituloTesoros == null)
+            if (Semana.Tesoros.TituloTesoros == null)
             {
-                semana.TituloTesoros = text;
+                Semana.Tesoros.TituloTesoros = text;
             }
             else if (text.StartsWith("3"))
             {
@@ -186,27 +212,27 @@ namespace AppVidaMinisterio.Services
             }
         }
 
-        private void AsignarMejoresMaestros(string text, Semana semana)
+        private void AsignarMejoresMaestros(string text)
         {
-            if (semana.AsignacionMejoresMaestros1 == null)
-                semana.AsignacionMejoresMaestros1 = text;
-            else if (semana.AsignacionMejoresMaestros2 == null)
-                semana.AsignacionMejoresMaestros2 = text;
-            else if (semana.AsignacionMejoresMaestros3 == null)
-                semana.AsignacionMejoresMaestros3 = text;
-            else if (semana.AsignacionMejoresMaestros4 == null)
-                semana.AsignacionMejoresMaestros4 = text;
+            if (Semana.MejoresMaestros.Asignacion1 == null)
+                Semana.MejoresMaestros.Asignacion1 = text;
+            else if (Semana.MejoresMaestros.Asignacion2 == null)
+                Semana.MejoresMaestros.Asignacion2 = text;
+            else if (Semana.MejoresMaestros.Asignacion3 == null)
+                Semana.MejoresMaestros.Asignacion3 = text;
+            else if (Semana.MejoresMaestros.Asignacion4 == null)
+                Semana.MejoresMaestros.Asignacion4 = text;
         }
 
-        private void AsignarVidaCristiana(string text, Semana semana)
+        private void AsignarVidaCristiana(string text)
         {
-            // Se asegura que el primer caracter de la cadena sea un número
-            // si es así, asigna el texto a la propiedad correspondiente
+            // Se asegura que el primer caracter de la cadena sea un número porque todas las asignaciones empiezan con un numero.
+            // Si es así, asigna el texto a la propiedad correspondiente
             if (text.Contains("Estudio bíblico de la congregación"))
             {
                 _seccionActual = Seccion.Ninguna;
                 _h3Valido = true;
-                semana.EstudioBiblico = text;
+                Semana.VidaCristiana.EstudioBiblico = text;
             }
             else
             {
@@ -214,10 +240,10 @@ namespace AppVidaMinisterio.Services
                 int _;
                 if (int.TryParse(primerCaracter, out _))
                 {
-                    if (semana.AsignacionVidaCristiana1 == null)
-                        semana.AsignacionVidaCristiana1 = text;
-                    else if (semana.AsignacionVidaCristiana2 == null)
-                        semana.AsignacionVidaCristiana2 = text;
+                    if (Semana.VidaCristiana.Asignacion1 == null)
+                        Semana.VidaCristiana.Asignacion1 = text;
+                    else if (Semana.VidaCristiana.Asignacion2 == null)
+                        Semana.VidaCristiana.Asignacion2 = text;
 
                     _h3Valido = true;
                 }
@@ -228,61 +254,61 @@ namespace AppVidaMinisterio.Services
             }
         }
 
-        private void AsignarCancion(string text, Semana semana)
+        private void AsignarCancion(string text)
         {
-            if (semana.CancionInicio == null)
-                semana.CancionInicio = $"{text} y oración";
-            else if (semana.CancionIntermedio == null)
-                semana.CancionIntermedio = text;
+            if (Semana.Cancion.Inicio == null)
+                Semana.Cancion.Inicio = $"{text} y oración";
+            else if (Semana.Cancion.Intermedio == null)
+                Semana.Cancion.Intermedio = text;
             else
-                semana.CancionFinal = $"{text} y oración";
+                Semana.Cancion.Final = $"{text} y oración";
         }
 
-        private void AsignarTextoBiblico(string text, Semana semana)
+        private void AsignarTextoBiblico(string text)
         {
             // Se suma todo el texto que se encuentren en el primer h2 porque este llega a estar dividido entre varios strong
-            semana.TextoBiblico += text;
+            Semana.TextoBiblico += text;
         }
 
-        private void AsignarFecha(string text, Semana semana)
+        private void AsignarFecha(string text)
         {
-            semana.SemanaFecha = text;
+            Semana.SemanaFecha = text;
         }
 
-        private void AsignarDetallesNodoP(string text, Semana semana)
+        private void AsignarDetallesNodoP(string text)
         {
             switch (_seccionActual)
             {
                 case Seccion.Tesoros:
                     _firstPNode = false;
-                    if (semana.DetallesLecturaBiblica == null)
-                        semana.DetallesLecturaBiblica = text;
+                    if (Semana.Tesoros.DetallesLecturaBiblica == null)
+                        Semana.Tesoros.DetallesLecturaBiblica = text;
                     break;
 
                 case Seccion.MejoresMaestros:
                     _firstPNode = false;
-                    if (semana.DetallesAsignacionMejoresMaestros1 == null)
-                        semana.DetallesAsignacionMejoresMaestros1 = text;
-                    else if (semana.DetallesAsignacionMejoresMaestros2 == null)
-                        semana.DetallesAsignacionMejoresMaestros2 = text;
-                    else if (semana.DetallesAsignacionMejoresMaestros3 == null)
-                        semana.DetallesAsignacionMejoresMaestros3 = text;
+                    if (Semana.MejoresMaestros.Detalles1 == null)
+                        Semana.MejoresMaestros.Detalles1 = text;
+                    else if (Semana.MejoresMaestros.Detalles2 == null)
+                        Semana.MejoresMaestros.Detalles2 = text;
+                    else if (Semana.MejoresMaestros.Detalles3 == null)
+                        Semana.MejoresMaestros.Detalles3 = text;
                     else
-                        semana.DetallesAsignacionMejoresMaestros4 = text;
+                        Semana.MejoresMaestros.Detalles4 = text;
                     break;
 
                 case Seccion.VidaCristiana:
                     _firstPNode = false;
-                    if (semana.DetallesAsignacionVidaCristiana1 == null)
-                        semana.DetallesAsignacionVidaCristiana1 = text;
-                    else if (semana.DetallesAsignacionVidaCristiana2 == null)
-                        semana.DetallesAsignacionVidaCristiana2 = text;
+                    if (Semana.VidaCristiana.Detalles1 == null)
+                        Semana.VidaCristiana.Detalles1 = text;
+                    else if (Semana.VidaCristiana.Detalles2 == null)
+                        Semana.VidaCristiana.Detalles2 = text;
                     break;
 
                 case Seccion.Ninguna:
                     _firstPNode = false;
                     _h3Valido = false;
-                        semana.DetallesEstudioBiblico = text;
+                        Semana.VidaCristiana.DetallesEstudioBiblico = text;
                     break;
 
                 default:
