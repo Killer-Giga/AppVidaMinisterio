@@ -5,8 +5,9 @@
              Title="Prueba">
     <VerticalStackLayout>
         <Label x:Name="etiquetaPrueba"
-            Text="Welcome to .NET MAUI!"
+            Text="Hola"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Image Source="dotnet_bot.png"/>
     </VerticalStackLayout>
 </ContentPage>
