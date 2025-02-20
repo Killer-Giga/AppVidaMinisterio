@@ -2,56 +2,81 @@
 {
     internal class Semana
     {
-        // INICIO
         public string? SemanaFecha { get; set; }
-        public string? TextoBiblico { get; set; }
-        public string? CancionInicio { get; set; }
-        public string? OradorInicial { get; set; } = "Oración inicial: ";
+        public string? TextoBiblico { get; set; }  
         public string? Presidente { get; set; } = "Presidente: ";
 
-        // TESOROS DE LA BIBLIA
-        public string? TituloTesoros { get; set; }
-        public string? OradorTesoros { get; set; }
+        public Canciones Cancion { get; init; }
+        public Oradores Orador { get; init; }
+        public TesorosDeLaBiblia Tesoros { get; init; }
+        public SeamosMejoresMaestros MejoresMaestros { get; init; }
+        public NuestraVidaCristiana VidaCristiana { get; init; }
 
-        public string? ConductorPerlas { get; set; }
+        public Semana()
+        {
+            Cancion = new Canciones();
+            Orador = new Oradores();
+            Tesoros = new TesorosDeLaBiblia();
+            MejoresMaestros = new SeamosMejoresMaestros();
+            VidaCristiana = new NuestraVidaCristiana();
+        }
 
-        public string? DetallesLecturaBiblica { get; set; }
-        public string? LectorBiblia { get; set; }
+        public class Canciones
+        {
+            public string? Inicio { get; set; }
+            public string? Intermedio { get; set; }
+            public string? Final { get; set; }
+        }
 
-        // SEAMOS MEJORES MAESTROS
-        public string? AsignacionMejoresMaestros1 { get; set; }
-        public string? AsignadoMejoresMaestros1 { get; set; }
-        public string? DetallesAsignacionMejoresMaestros1 { get; set; }
+        public class Oradores
+        {
+            public string? Inicial { get; set; } = "Oración inicial: ";
+            public string? Final { get; set; } = "Oración final: ";
+        }
 
-        public string? AsignacionMejoresMaestros2 { get; set; }
-        public string? AsignadoMejoresMaestros2 { get; set; }
-        public string? DetallesAsignacionMejoresMaestros2 { get; set; }
+        public class TesorosDeLaBiblia
+        {
+            public string? TituloTesoros { get; set; }
+            public string? OradorTesoros { get; set; }
 
-        public string? AsignacionMejoresMaestros3 { get; set; }
-        public string? AsignadoMejoresMaestros3 { get; set; }
-        public string? DetallesAsignacionMejoresMaestros3 { get; set; }
+            public string? ConductorPerlas { get; set; }
 
-        public string? AsignacionMejoresMaestros4 { get; set; }
-        public string? AsignadoMejoresMaestros4 { get; set; }
-        public string? DetallesAsignacionMejoresMaestros4 { get; set; }
+            public string? DetallesLecturaBiblica { get; set; }
+            public string? LectorBiblia { get; set; }
+        }
 
-        // NUESTRA VIDA CRISTIANA
-        public string? CancionIntermedio { get; set; }
+        public class SeamosMejoresMaestros
+        {
+            public string? Asignacion1 { get; set; }
+            public string? Asignado1 { get; set; }
+            public string? Detalles1 { get; set; }
 
-        public string? AsignacionVidaCristiana1 { get; set; }
-        public string? AsignadoVidaCristiana1 { get; set; }
-        public string? DetallesAsignacionVidaCristiana1 { get; set; }
+            public string? Asignacion2 { get; set; }
+            public string? Asignado2 { get; set; }
+            public string? Detalles2 { get; set; }
 
-        public string? AsignacionVidaCristiana2 { get; set; }
-        public string? AsignadoVidaCristiana2 { get; set; }
-        public string? DetallesAsignacionVidaCristiana2 { get; set; }
+            public string? Asignacion3 { get; set; }
+            public string? Asignado3 { get; set; }
+            public string? Detalles3 { get; set; }
 
-        public string? EstudioBiblico { get; set; } 
-        public string? ConductorYLectorEstudioBiblico { get; set; } = "Conductor: \nLector: ";
-        public string? DetallesEstudioBiblico { get; set; }
+            public string? Asignacion4 { get; set; }
+            public string? Asignado4 { get; set; }
+            public string? Detalles4 { get; set; }
+        }
+        
+        public class NuestraVidaCristiana
+        {
+            public string? Asignacion1 { get; set; }
+            public string? Asignado1 { get; set; }
+            public string? Detalles1 { get; set; }
 
-        // FINAL
-        public string? CancionFinal { get; set; }
-        public string? OradorFinal { get; set; } = "Oración final: ";
+            public string? Asignacion2 { get; set; }
+            public string? Asignado2 { get; set; }
+            public string? Detalles2 { get; set; }
+
+            public string? EstudioBiblico { get; set; }
+            public string? ConductorYLectorEstudioBiblico { get; set; } = "Conductor: \nLector: ";
+            public string? DetallesEstudioBiblico { get; set; }
+        }
     }
 }
