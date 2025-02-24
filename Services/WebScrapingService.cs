@@ -128,19 +128,10 @@ namespace AppVidaMinisterio.Services
                     AsignarParte(node);
                     _firstPNode = true;
                 }
-                else if (node.Name == "p")
+                else if (node.Name == "p" && _firstPNode && _h3Valido)
                 {
                     // Toma el nodo siguiente al h3 y asigna los detalles
-                    if (_seccionActual == Seccion.Tesoros && _firstPNode && _h3Valido)
                         AsignarDetallesNodoP(node.InnerText.Trim());
-                    else if (_seccionActual == Seccion.MejoresMaestros && _firstPNode)
-                        AsignarDetallesNodoP(node.InnerText.Trim());
-                    else if (_seccionActual == Seccion.VidaCristiana && _firstPNode && _h3Valido)
-                        AsignarDetallesNodoP(node.InnerText.Trim());
-                    else if (_seccionActual == Seccion.Ninguna && _firstPNode && _h3Valido)
-                        AsignarDetallesNodoP(node.InnerText.Trim());
-                    else
-                        continue;
                 }
             }
         }
@@ -208,6 +199,7 @@ namespace AppVidaMinisterio.Services
             }
             else if (text.StartsWith("3"))
             {
+                // Se examina el 3 porque es el numero de la lectura biblica, donde si hay detalles guardados en el nodo p
                 _h3Valido = true;
             }
         }
@@ -226,8 +218,8 @@ namespace AppVidaMinisterio.Services
 
         private void AsignarVidaCristiana(string text)
         {
-            // Se asegura que el primer caracter de la cadena sea un número porque todas las asignaciones empiezan con un numero.
-            // Si es así, asigna el texto a la propiedad correspondiente
+            // Se asegura que el primer caracter de la cadena sea un número porque todas las asignaciones empiezan con un numero. Hay nodos h3 que no tienen numero y se reemplaza el contenido de la propiedad
+            // Si es así, asigna el texto a la propiedad correspondiente. 
             if (text.Contains("Estudio bíblico de la congregación"))
             {
                 _seccionActual = Seccion.Ninguna;
