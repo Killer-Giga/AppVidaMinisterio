@@ -60,7 +60,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.72" />
+	  <MauiImage Remove="Resources\Images\nvc_embedded_resource.png" />
+	  <MauiImage Remove="Resources\Images\nvc__embedded_resource.png" />
+	  <MauiImage Remove="Resources\Images\smm_embedded_resource.png" />
+	  <MauiImage Remove="Resources\Images\tesoros_embedded_resource.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Images\nvc_embedded_resource.png" />
+	  <EmbeddedResource Include="Resources\Images\smm_embedded_resource.png" />
+	  <EmbeddedResource Include="Resources\Images\tesoros_embedded_resource.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.73" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.40" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.2" />
 		<PackageReference Include="QuestPDF" Version="2025.1.3" />

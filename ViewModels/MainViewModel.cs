@@ -14,12 +14,11 @@ namespace AppVidaMinisterio.ViewModels
         public ICommand SiguienteComand { get; }
         public ICommand AnteriorComand { get; }
         public ICommand GuardarComand { get; }
+        public ICommand GeneratePdf { get; }
 
         // Variables y propiedades para las semanas
         DataStorageService dataStorageService = new DataStorageService();
         SortedDictionary<int, Semana> weeks = new SortedDictionary<int, Semana>();
-
-        // Nota: Que pasa si el dispositivo no esta conectado a internet. Se necesita manejar esas excepciones
         private string _url = "https://wol.jw.org/es/wol/meetings/r4/lp-s/2025/00";
 
         // Semana del año que se muestra en la pantalla de inicio
@@ -52,6 +51,7 @@ namespace AppVidaMinisterio.ViewModels
             SiguienteComand = new Command(NextWeek);
             AnteriorComand = new Command(PreviousWeek);
             GuardarComand = new Command(SaveJson);
+            GeneratePdf = new Command(PdfGenerator);
         }
 
         public async Task InitializeAsync()
@@ -70,6 +70,7 @@ namespace AppVidaMinisterio.ViewModels
                 weeks = await dataStorageService.ReadJsonAsync();
                 SemanaActual = weeks[_weekNumber];
             }
+            
         }
 
         // Métodos para las semanas
@@ -96,6 +97,16 @@ namespace AppVidaMinisterio.ViewModels
         private void SaveJson()
         {
             dataStorageService.SaveJson(weeks);
+        }
+
+        private void PdfGenerator()
+        { 
+            // movi la licencia para que funcionara en android pero no lo hace
+            QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+            if (SemanaActual != null)
+            {
+                PdfGeneratorService pdfGeneratorService = new PdfGeneratorService(SemanaActual);
+            }
         }
 
         // Metodos para el Data Binding

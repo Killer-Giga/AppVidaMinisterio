@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using QuestPDF.Infrastructure;
 
 namespace AppVidaMinisterio
 {
@@ -7,6 +6,7 @@ namespace AppVidaMinisterio
     {
         public static MauiApp CreateMauiApp()
         {
+            
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -15,8 +15,6 @@ namespace AppVidaMinisterio
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
-
-            QuestPDF.Settings.License = LicenseType.Community;
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
