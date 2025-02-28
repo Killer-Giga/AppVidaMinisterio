@@ -18,6 +18,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Pdf" Command="{Binding GeneratePdf}"/>
         <ToolbarItem Text="Guardar" Command="{Binding GuardarComand}"/>
     </ContentPage.ToolbarItems>
     
@@ -151,7 +152,7 @@
 
             <Border Grid.Row="6" WidthRequest="275" Stroke="{StaticResource NuestraVidaCristiana}">
                 <Grid Margin="0">
-                    <Image Source="nuestra_vida_crisitiana.png" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Image Source="nuestra_vida_cristiana.png" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             NUESTRA VIDA CRISTIANA" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
                 </Grid>
             </Border>
