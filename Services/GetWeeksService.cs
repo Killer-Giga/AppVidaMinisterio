@@ -6,17 +6,18 @@ namespace AppVidaMinisterio.Services
     internal class GetWeeksService
     {
         // Esta clase se encarga de controlar la logica de las semanas a descargar y hacerlo en paralelo
+
+        private string _url = "https://wol.jw.org/es/wol/meetings/r4/lp-s";
         private string Url { get; set; }
-        public GetWeeksService(string url)
+     
+        public GetWeeksService()
         {
-            Url = url;
+            Url = GetUrl();
         }
 
         public async Task<SortedDictionary<int, Semana>> GetWeeks()
         {
-            // Define las semanas a descargar apartir de la semana actual del dispositivo.
-            // seria bueno que tuviera 2 sobrecargas
-            // para que el metodo pueda empezar desde que se inicia la app pero tambien apartir de la ultima semana descargada del dispositivo
+            // Saca las semanas apartir de la semana actual del dispostivo
             int currentWeekNumber = GetCurrentWeek();
             int validWeeks = await ValidWeeks(currentWeekNumber);
             Semana[] weekArray = new Semana[validWeeks];
@@ -26,64 +27,132 @@ namespace AppVidaMinisterio.Services
             {
                 weekArray[i] = new Semana();
                 string url = $"{Url.Substring(0, Url.LastIndexOf('/') + 1)}{currentWeekNumber:D2}";
+
                 tasks.Add(new WebScrapingService(weekArray[i], url).WebScraping());
                 currentWeekNumber++;
-                // Probar con 2024
+                //  Cambia de año si llega a la ultima semana del año
                 if (currentWeekNumber > 52)
                 {
-                    ChangeUrl();
+                    ChangeUrl(url);
                     currentWeekNumber = 1;
                 }
             }
             await Task.WhenAll(tasks);
             
             return ConvertedArrayInDictionary(weekArray);
-        }    
+        }
 
-        public async Task<int> ValidWeeks(int currentWeekNumber)
+        public async Task GetNewWeeks(SortedDictionary<int, Semana> weeks)
         {
-            // Valida las semanas que si tienen contenido apartir de la semana del dispositivo para determinar cuantas semanas se van a descargar
-            int maxWeeks = 25;
-            List<Task<bool>> tasks = new List<Task<bool>>();
-            List<int> weeksNumbers = new List<int>();
-            Semana week = new Semana();
+            // Metodo para obtener nuevas semanas apartir de la ultima anteriormente descargada
+            int currentDate = weeks.Keys.Last() + 1; 
+            if (currentDate % 100 == 53)
+                currentDate = ChangeDate(currentDate);
+            string currentDateString = currentDate.ToString().Remove(0, 4);
+            int currentWeekNumber = int.Parse(currentDateString);
 
-            for (int i = 0; i < maxWeeks; i++)
+            int validWeeks = await ValidWeeks(currentWeekNumber);
+            Semana[] weekArray = new Semana[validWeeks];
+            List<Task> tasks = new List<Task>();
+
+            for (int i = 0; i < validWeeks; i++)
             {
-                string url = $"{Url.Substring(0, Url.LastIndexOf('/') + 1)}{currentWeekNumber:D2}";
-                var service = new WebScrapingService(week, url);
-                tasks.Add(service.HasValidContentAsync());
+                weekArray[i] = new Semana();
                 
+                string url = $"{Url.Substring(0, Url.LastIndexOf('/') + 1)}{currentWeekNumber:D2}";
+                tasks.Add(new WebScrapingService(weekArray[i], url).WebScraping());
                 currentWeekNumber++;
+                // Cambia de año si llega a la ultima semana del año
                 if (currentWeekNumber > 52)
                 {
-                    ChangeUrl();
+                    url = ChangeUrl(url);
                     currentWeekNumber = 1;
                 }
             }
+            await Task.WhenAll(tasks);
 
-            bool[] results = await Task.WhenAll(tasks);
-            int validWeeks = 0;
-            foreach (bool isValid in results)
+            foreach (Semana week in weekArray)
             {
-                if (isValid)
-                    validWeeks++;
+                if (currentDate % 100 == 53)
+                {
+                    currentDate = ChangeDate(currentDate);
+                    weeks.Add(currentDate++, week);
+                }
                 else
-                    break;
-            } 
-            return validWeeks;
+                    weeks.Add(currentDate++, week);
+            }
+        }
+
+        public async Task<int> ValidWeeks(int currentWeekNumber)
+        {
+            // Valida las semanas que si tienen contenido apartir de la semana recibida para determinar cuantas semanas se van a descargar
+            try
+            {
+                int maxWeeks = 20;
+                List<Task<bool>> tasks = new List<Task<bool>>();
+                Semana week = new Semana();
+                for (int i = 0; i < maxWeeks; i++)
+                {
+                    string url = $"{Url.Substring(0, Url.LastIndexOf('/') + 1)}{currentWeekNumber:D2}";
+                    var service = new WebScrapingService(week, url);
+                    tasks.Add(service.HasValidContentAsync());
+
+                    currentWeekNumber++;
+                    if (currentWeekNumber > 52)
+                    {
+                        url = ChangeUrl(url);
+                        currentWeekNumber = 1;
+                    }
+                }
+
+                bool[] results = await Task.WhenAll(tasks);
+                int validWeeks = 0;
+                foreach (bool isValid in results)
+                {
+                    if (isValid)
+                        validWeeks++;
+                    else
+                        break;
+                }
+                return validWeeks;
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                throw new IndexOutOfRangeException("Error: ", ex);
+            }
         }
 
         public SortedDictionary<int, Semana> ConvertedArrayInDictionary(Semana[] weekArray)
         {
             // Convierte el array de semanas en un diccionario para poder acceder a las semanas por su numero
-            int currentWeekNumber = GetCurrentWeek();
+            string currentDateString = $"{GetCurrentYear().ToString()}{GetCurrentWeek().ToString("D2")}";
+            int currentWeekNumber = int.Parse(currentDateString);
             SortedDictionary<int, Semana> weeks = new SortedDictionary<int, Semana>();
             foreach (var week in weekArray)
             {
-                weeks.Add(currentWeekNumber++, week);
+                if (currentWeekNumber % 100 == 53)
+                {
+                    currentWeekNumber = ChangeDate(currentWeekNumber);
+                    weeks.Add(currentWeekNumber++, week);
+                }
+                else
+                    weeks.Add(currentWeekNumber++, week);
             }
             return weeks;
+        }
+
+        public string GetUrl()
+        {
+            string currentYear = GetCurrentYear().ToString();
+            string currentWeek = GetCurrentWeek().ToString("D2");
+            return Url = $"{_url}/{currentYear}/{currentWeek}";
+        }
+
+        public int GetCurrentDate()
+        {
+            string currentDateString = $"{GetCurrentYear().ToString()}{GetCurrentWeek().ToString("D2")}";
+            int currentDate = int.Parse(currentDateString);
+            return currentDate;
         }
 
         public int GetCurrentWeek()
@@ -94,9 +163,20 @@ namespace AppVidaMinisterio.Services
             return currentWeek;
         }
 
-        public string ChangeUrl()
+        public int GetCurrentYear()
         {
-            return Url = $"{Url.Substring(0, Url.LastIndexOf("22") + 2)}00/01";
+            int year = DateTime.Now.Year;
+            return year;
         }
+
+        public string ChangeUrl(string url)
+        {
+            string[] urlParts = url.Split('/');
+            int actualYear = int.Parse(urlParts[urlParts.Length - 2]);
+            int newYear = actualYear + 1;
+            return $"{string.Join("/", urlParts[..^2])}/{newYear.ToString()}/01";
+        }
+
+        public int ChangeDate(int date) => date + 48;
     }
 }

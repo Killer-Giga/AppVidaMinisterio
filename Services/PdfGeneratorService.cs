@@ -1,6 +1,7 @@
 ﻿using AppVidaMinisterio.Models;
 using AppVidaMinisterio.Services.PdfTemplates;
 using QuestPDF.Companion;
+using QuestPDF.Fluent;
 
 namespace AppVidaMinisterio.Services
 {
@@ -14,11 +15,10 @@ namespace AppVidaMinisterio.Services
         public PdfGeneratorService(Semana week)
         {
             document = new WeekPdfTemplate(week);
-
 #if DEBUG
-            ShowInCompanionA();
+            _ = ShowInCompanionA();
 #endif
-            //document.GeneratePdfAndShow();
+            document.GeneratePdfAndShow();
         }
 
         public async Task ShowInCompanionA()

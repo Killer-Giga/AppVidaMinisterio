@@ -18,6 +18,8 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Borrar" Command="{Binding DeleteWeeks}"/>
+        <ToolbarItem Text="Actualizar" Command="{Binding NewWeeks}"/>
         <ToolbarItem Text="Pdf" Command="{Binding GeneratePdf}"/>
         <ToolbarItem Text="Guardar" Command="{Binding GuardarComand}"/>
     </ContentPage.ToolbarItems>
