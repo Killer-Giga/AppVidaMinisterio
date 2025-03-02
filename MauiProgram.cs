@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
+using QuestPDF.Infrastructure;
 
 namespace AppVidaMinisterio
 {
     public static class MauiProgram
-    {
+    { 
         public static MauiApp CreateMauiApp()
         {
-            
+            QuestPDF.Settings.License = LicenseType.Community;
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
