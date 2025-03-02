@@ -11,17 +11,21 @@ namespace AppVidaMinisterio.Services
         // Donde guardar el pdf
         // Enviar el pdf
         // Decidir cuantas semanas se mostrarán en el pdf
-        WeekPdfTemplate document;
+
+        private WeekPdfTemplate document;
+
         public PdfGeneratorService(Semana week)
         {
             document = new WeekPdfTemplate(week);
-#if DEBUG
+
+#if DEBUG && WINDOWS
             _ = ShowInCompanionA();
 #endif
+
             document.GeneratePdfAndShow();
         }
 
-        public async Task ShowInCompanionA()
+        private async Task ShowInCompanionA()
         {
             // Tengo que usar Async pues ShowInCompanion no funciona
             await document.ShowInCompanionAsync();

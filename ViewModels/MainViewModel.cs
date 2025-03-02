@@ -118,8 +118,6 @@ namespace AppVidaMinisterio.ViewModels
 
         private void PdfGenerator()
         { 
-            // movi la licencia para que funcionara en android pero no lo hace
-            QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
             if (SemanaActual != null)
             {
                 PdfGeneratorService pdfGeneratorService = new PdfGeneratorService(SemanaActual);
