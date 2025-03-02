@@ -18,12 +18,12 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Borrar" Command="{Binding DeleteWeeks}"/>
-        <ToolbarItem Text="Actualizar" Command="{Binding NewWeeks}"/>
-        <ToolbarItem Text="Pdf" Command="{Binding GeneratePdf}"/>
-        <ToolbarItem Text="Guardar" Command="{Binding GuardarComand}"/>
+        <ToolbarItem Text="Guardar"  Command="{Binding GuardarComand}" Order="Primary"/>
+        <ToolbarItem Text="Actualizar" Command="{Binding NewWeeks}" Order="Secondary"/>
+        <ToolbarItem Text="Generar Pdf" Command="{Binding GeneratePdf}" Order="Secondary"/>
+        <ToolbarItem Text="Borrar" Command="{Binding DeleteWeeks}" Order="Secondary"/>
     </ContentPage.ToolbarItems>
-    
+
     <ScrollView>
         <Grid RowDefinitions="auto, auto, 30, auto, 30, auto, 30, auto, auto" ColumnDefinitions="auto,*,*">
 
