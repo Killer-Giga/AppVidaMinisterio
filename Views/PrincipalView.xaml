@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:AppVidaMinisterio.ViewModels"
              x:Class="AppVidaMinisterio.Views.PrincipalView"
-             x:DataType="viewModels:MainViewModel"
-             Title="Rol Vida y Ministerio">
+             x:DataType="viewModels:MainViewModel">
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -18,7 +17,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Guardar"  Command="{Binding GuardarComand}" Order="Primary"/>
+        <ToolbarItem Text="Guardar" Command="{Binding GuardarComand}" Order="Primary"/>
         <ToolbarItem Text="Actualizar" Command="{Binding NewWeeks}" Order="Secondary"/>
         <ToolbarItem Text="Generar Pdf" Command="{Binding GeneratePdf}" Order="Secondary"/>
         <ToolbarItem Text="Borrar" Command="{Binding DeleteWeeks}" Order="Secondary"/>
@@ -27,20 +26,23 @@
     <ScrollView>
         <Grid RowDefinitions="auto, auto, 30, auto, 30, auto, 30, auto, auto" ColumnDefinitions="auto,*,*">
 
-            <Border BackgroundColor="Black" Padding="5" HeightRequest="55" Grid.Row="0" Grid.ColumnSpan="3">
+            <Border BackgroundColor="{AppThemeBinding Dark={StaticResource PrimaryDark}, Light={StaticResource Primary}}" Stroke="{StaticResource Primary}" Padding="4" HeightRequest="55" Grid.Row="0" Grid.ColumnSpan="3">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="40,40,40,40"/>
+                </Border.StrokeShape>
                 <Grid ColumnDefinitions="*,auto,*" Margin="0">
-                    <Button Grid.Column="0" HorizontalOptions="Start" Text="&lt;" Grid.Row="0" Command="{Binding AnteriorComand}"/>
+                    <Button BackgroundColor="{AppThemeBinding Dark={StaticResource Primary}, Light={StaticResource PrimaryDark}}" CornerRadius="60" Grid.Column="0" HorizontalOptions="Start" Text="&lt;" Grid.Row="0" Command="{Binding AnteriorComand}"/>
 
                     <Label x:Name="semana"
                            Text="{Binding SemanaActual.SemanaFecha}"
-                           TextColor="White"
+                           TextColor="{AppThemeBinding Dark={StaticResource Primary}, Light={StaticResource PrimaryDark}}"
                        FontSize="Medium"
                            Grid.Column="1"
                        HorizontalOptions="Center"
                        VerticalOptions="Center" />
 
-                    <Button Grid.Column="2" HorizontalOptions="End" Text=">" Command="{Binding SiguienteComand}"/>
-                    </Grid>
+                    <Button BackgroundColor="{AppThemeBinding Dark={StaticResource Primary}, Light={StaticResource PrimaryDark}}" CornerRadius="60" Grid.Column="2" HorizontalOptions="End" Text=">" Command="{Binding SiguienteComand}"/>
+                </Grid>
             </Border>
 
             <Grid RowDefinitions="*,*" 
@@ -69,7 +71,7 @@
                        Grid.Column="2"/>
             </Grid>
 
-            <Border Grid.Row="2" WidthRequest="275" Stroke="{StaticResource TesorosDeLaBiblia}">
+            <Border Grid.Row="2" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource TesorosDark}, Light={StaticResource TesorosLight}}">
                 <Grid Margin="0">
                     <Image Source="tesoros.png" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             TESOROS DE LA BIBLIA" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
@@ -88,27 +90,27 @@
                 </Grid.Resources>
 
                 <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" RowDefinitions="*,*">
-                    <Label x:Name="tesorosDeLaBiblia" Text="{Binding SemanaActual.Tesoros.TituloTesoros}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                    <Label x:Name="tesorosDeLaBiblia" Text="{Binding SemanaActual.Tesoros.TituloTesoros}" TextColor="{AppThemeBinding Dark={StaticResource TesorosDark}, Light={StaticResource TesorosLight}}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
                     <Label Text="(10 mins.)" Grid.Row="1" FontAttributes="None"/>
                 </Grid>
                 <Entry x:Name="discursanteTesoros" Text="{Binding SemanaActual.Tesoros.OradorTesoros}" Grid.Row="0" Grid.Column="2"/>
 
 
                 <Grid Grid.Row="1" Grid.ColumnSpan="2" RowDefinitions="*,*">
-                    <Label Text="2. Busquemos perlas escondidas" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                    <Label Text="2. Busquemos perlas escondidas" TextColor="{AppThemeBinding Dark={StaticResource TesorosDark}, Light={StaticResource TesorosLight}}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
                     <Label Text="(10 mins.)" Grid.Row="1" FontAttributes="None"/>
                 </Grid>
                 <Entry x:Name="conductorPerlas" Text="{Binding SemanaActual.Tesoros.ConductorPerlas}" Grid.Row="1" Grid.Column="2"/>
 
                 <Grid Grid.Row="2" Grid.ColumnSpan="2" RowDefinitions="*,*">
-                    <Label Text="3. Lectura de la Biblia" Grid.Row="0"/>
+                    <Label Text="3. Lectura de la Biblia" TextColor="{AppThemeBinding Dark={StaticResource TesorosDark}, Light={StaticResource TesorosLight}}" Grid.Row="0"/>
                     <Label Text="{Binding SemanaActual.Tesoros.DetallesLecturaBiblica}" Grid.Row="1" FontAttributes="None"/>
                 </Grid>
                 <Entry x:Name="lectorBiblia" Text="{Binding SemanaActual.Tesoros.LectorBiblia}" Grid.Row="3" Grid.Column="2"/>
 
             </Grid>
 
-            <Border Grid.Row="4" WidthRequest="275" Stroke="{StaticResource SeamosMejoresMaestros}">
+            <Border Grid.Row="4" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}">
                 <Grid Margin="0">
                     <Image Source="seamos_mejores_maestros.png" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             SEAMOS MEJORES MAESTROS" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
@@ -127,32 +129,32 @@
                 </Grid.Resources>
 
                 <Grid Grid.Row="0" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Label x:Name="asignacionEstudiantil1" Text="{Binding SemanaActual.MejoresMaestros.Asignacion1}" Grid.Row="0"/>
+                <Label x:Name="asignacionEstudiantil1" Text="{Binding SemanaActual.MejoresMaestros.Asignacion1}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" Grid.Row="0"/>
                     <Label Text="{Binding SemanaActual.MejoresMaestros.Detalles1}" FontAttributes="None" FontSize="Caption" Grid.Row="1" MaxLines="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Editor x:Name="asinadoEstudiantil1" Text="{Binding SemanaActual.MejoresMaestros.Asignado1}" AutoSize="TextChanges" Grid.Row="0" Grid.Column="2"/>
 
                 <Grid Grid.Row="1" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Label x:Name="asignacionEstudiantil2" Text="{Binding SemanaActual.MejoresMaestros.Asignacion2}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                <Label x:Name="asignacionEstudiantil2" Text="{Binding SemanaActual.MejoresMaestros.Asignacion2}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
                     <Label Text="{Binding SemanaActual.MejoresMaestros.Detalles2}" FontAttributes="None" FontSize="Caption" Grid.Row="1" MaxLines="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Editor x:Name="asignadoEstudiantil2" Text="{Binding SemanaActual.MejoresMaestros.Asignado2}" AutoSize="TextChanges" Grid.Row="1" Grid.Column="2"/>
 
                 <Grid Grid.Row="2" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Label x:Name="asignacionEstudiantil3" Text="{Binding SemanaActual.MejoresMaestros.Asignacion3}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros3}" Grid.Row="0"/>
+                <Label x:Name="asignacionEstudiantil3" Text="{Binding SemanaActual.MejoresMaestros.Asignacion3}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros3}" Grid.Row="0"/>
                     <Label Text="{Binding SemanaActual.MejoresMaestros.Detalles3}" FontAttributes="None" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros3}" FontSize="Caption" Grid.Row="1" MaxLines="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Editor x:Name="asignadoEstudiantil3" Text="{Binding SemanaActual.MejoresMaestros.Asignado3}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros3}" AutoSize="TextChanges" Grid.Row="2" Grid.Column="2"/>
 
                 <Grid Grid.Row="3" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Label x:Name="asignacionEstudiantil4" Text="{Binding SemanaActual.MejoresMaestros.Asignacion4}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros4}" Grid.Row="0"/>
+                <Label x:Name="asignacionEstudiantil4" Text="{Binding SemanaActual.MejoresMaestros.Asignacion4}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros4}" Grid.Row="0"/>
                     <Label Text="{Binding SemanaActual.MejoresMaestros.Detalles4}" FontAttributes="None" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros4}" FontSize="Caption" Grid.Row="1" MaxLines="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Editor x:Name="asignadoEstudiantil4" Text="{Binding SemanaActual.MejoresMaestros.Asignado4}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros4}" AutoSize="TextChanges" Grid.Row="3" Grid.Column="2"/>
 
             </Grid>
 
-            <Border Grid.Row="6" WidthRequest="275" Stroke="{StaticResource NuestraVidaCristiana}">
+            <Border Grid.Row="6" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}">
                 <Grid Margin="0">
                     <Image Source="nuestra_vida_cristiana.png" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             NUESTRA VIDA CRISTIANA" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
@@ -173,19 +175,19 @@
                 <Label x:Name="cancionIntermedio" FontAttributes="None" Text="{Binding SemanaActual.Cancion.Intermedio}" Grid.Row="0"/>
 
                 <Grid Grid.Row="1" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Label x:Name="asignacionVidaCristiana1" Text="{Binding SemanaActual.VidaCristiana.Asignacion1}" Grid.Row="0" LineBreakMode="TailTruncation"/>
+                    <Label x:Name="asignacionVidaCristiana1" Text="{Binding SemanaActual.VidaCristiana.Asignacion1}" TextColor="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}" Grid.Row="0" LineBreakMode="TailTruncation"/>
                     <Label Text="{Binding SemanaActual.VidaCristiana.Detalles1}" FontAttributes="None" FontSize="Caption" Grid.Row="1"/>
                 </Grid>
                 <Entry x:Name="asignadoVidaCristiana1" Text="{Binding SemanaActual.VidaCristiana.Asignado1}" Grid.Row="1" Grid.Column="2"/>
 
                 <Grid Grid.Row="2" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsVisibleAsignacionVidaCristiana2}">
-                    <Label x:Name="asignacionVidaCristiana2" Text="{Binding SemanaActual.VidaCristiana.Asignacion2}" Grid.Row="0"/>
+                    <Label x:Name="asignacionVidaCristiana2" Text="{Binding SemanaActual.VidaCristiana.Asignacion2}" TextColor="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}" Grid.Row="0"/>
                     <Label Text="{Binding SemanaActual.VidaCristiana.Detalles2}" FontAttributes="None" FontSize="Caption" Grid.Row="1"/>
                 </Grid>
                 <Entry x:Name="asignadoVidaCristiana2" Text="{Binding SemanaActual.VidaCristiana.Asignado2}" IsVisible="{Binding IsVisibleAsignacionVidaCristiana2}" Grid.Row="2" Grid.Column="2"/>
 
                 <Grid Grid.Row="3" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Label x:Name="estudioBilico" Text="{Binding SemanaActual.VidaCristiana.EstudioBiblico}" Grid.Row="0"/>
+                    <Label x:Name="estudioBilico" Text="{Binding SemanaActual.VidaCristiana.EstudioBiblico}" TextColor="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}" Grid.Row="0"/>
                     <Label Text="{Binding SemanaActual.VidaCristiana.DetallesEstudioBiblico}" FontAttributes="None" FontSize="Caption" Grid.Row="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Editor x:Name="conductorEstudioBiblico" Placeholder="Conductor:&#x0a;Lector:" Text="{Binding SemanaActual.VidaCristiana.ConductorYLectorEstudioBiblico}" AutoSize="TextChanges" Grid.Row="3" Grid.Column="2"/>

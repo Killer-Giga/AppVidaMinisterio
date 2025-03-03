@@ -6,18 +6,29 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
-    <Color x:Key="Primary">#512BD4</Color>
-    <Color x:Key="PrimaryDark">#ac99ea</Color>
+    <Color x:Key="TesorosLight">#2a6b77</Color>
+    <Color x:Key="MejoresMaestrosLight">#9b6d17</Color>
+    <Color x:Key="VidaCristianaLight">#942946</Color>
+
+    <Color x:Key="TesorosDark">#86BFCA</Color>
+    <Color x:Key="MejoresMaestrosDark">#F2BE5C</Color>
+    <Color x:Key="VidaCristianaDark">#D97979</Color>
+
+    <Color x:Key="JwLibrary">#583F8C</Color>
+    <Color x:Key="JwLibraryText">#B9A3D9</Color>
+
+    <Color x:Key="Primary">#B9A3D9</Color>
+    <Color x:Key="PrimaryDark">#583F8C</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
-    <Color x:Key="Secondary">#DFD8F7</Color>
-    <Color x:Key="SecondaryDarkText">#9880e5</Color>
+    <Color x:Key="Secondary">#F2F2F2</Color>
+    <Color x:Key="SecondaryDarkText">#B9A3D9</Color>
     <Color x:Key="Tertiary">#2B0B98</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>
     <Color x:Key="Magenta">#D600AA</Color>
     <Color x:Key="MidnightBlue">#190649</Color>
-    <Color x:Key="OffBlack">#1f1f1f</Color>
+    <Color x:Key="OffBlack">#0D0D0D</Color>
 
     <Color x:Key="Gray100">#E1E1E1</Color>
     <Color x:Key="Gray200">#C8C8C8</Color>

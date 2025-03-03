@@ -13,7 +13,9 @@
             <Image Source="dotnet_bot.png"/>
         </Grid>
     </Shell.FlyoutHeader>
-    
-    <ShellContent Title="Semana Actual" 
+
+   
+
+    <ShellContent Title="Semana Actual"
                   ContentTemplate="{DataTemplate local:PrincipalView}"/>
 </Shell>
