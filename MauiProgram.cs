@@ -1,10 +1,14 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AppVidaMinisterio.ViewModels;
+using AppVidaMinisterio.Views;
+using Microsoft.Extensions.Logging;
 using QuestPDF.Infrastructure;
 
 namespace AppVidaMinisterio
 {
     public static class MauiProgram
-    { 
+    {
+        public static MauiApp? MauiAppInstance { get; private set; }
+
         public static MauiApp CreateMauiApp()
         {
             QuestPDF.Settings.License = LicenseType.Community;
@@ -17,11 +21,19 @@ namespace AppVidaMinisterio
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            builder.Services.AddSingleton<MainViewModel>();
+
+            // Registra las páginas
+            builder.Services.AddTransient<PrincipalView>();
+            builder.Services.AddSingleton<AppShell>();
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
+            MauiAppInstance = builder.Build();
+            return MauiAppInstance;
         }
     }
 }

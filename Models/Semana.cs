@@ -1,6 +1,6 @@
 ﻿namespace AppVidaMinisterio.Models
 {
-    internal class Semana
+    public class Semana
     {
         public string? SemanaFecha { get; set; }
         public string? TextoBiblico { get; set; }  
