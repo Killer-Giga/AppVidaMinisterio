@@ -106,14 +106,8 @@ namespace AppVidaMinisterio.Services
                 }
 
                 bool[] results = await Task.WhenAll(tasks);
-                int validWeeks = 0;
-                foreach (bool isValid in results)
-                {
-                    if (isValid)
-                        validWeeks++;
-                    else
-                        break;
-                }
+                // Nota: Cuando sea la conmemoracion entre semana no habra contenido valido
+                int validWeeks = results.TakeWhile(isValid => isValid).Count();
                 return validWeeks;
             }
             catch (IndexOutOfRangeException ex)
