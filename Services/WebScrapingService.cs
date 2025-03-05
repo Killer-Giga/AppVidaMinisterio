@@ -75,11 +75,11 @@ namespace AppVidaMinisterio.Services
             }
             catch (InvalidOperationException ex)
             {
-                throw new InvalidOperationException("Error: ", ex);
+                throw new InvalidOperationException("Error: Web Scraping", ex);
             }
             catch (HttpRequestException ex)
             {
-                throw new HttpRequestException("Error: ", ex);
+                throw new HttpRequestException("Error: Web Scraping", ex);
             }
         }
 
