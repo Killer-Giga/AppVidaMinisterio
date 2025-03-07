@@ -1,39 +1,35 @@
 ﻿using AppVidaMinisterio.Models;
 using AppVidaMinisterio.Services;
-using System.ComponentModel;
-using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using AppVidaMinisterio.Messages;
 
 namespace AppVidaMinisterio.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public partial class MainViewModel : ObservableObject
     {
-        // Propiedades para el Data Binding
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        // Comandos
-        public ICommand SiguienteComand { get; }
-        public ICommand AnteriorComand { get; }
-        public ICommand GuardarComand { get; }
-        public ICommand GeneratePdfComand { get; }
-        public ICommand NewWeeksComand { get; }
-        public ICommand DeleteWeeksComand { get; }
-        public ICommand LoadDataCommand { get; }
-
         // Variables y propiedades para las semanas
         DataStorageService dataStorageService = new DataStorageService();
         SortedDictionary<int, Semana> weeks = new SortedDictionary<int, Semana>();
+
         // Semana del año que se muestra en la pantalla de inicio. Esta conformado por año y numero de semana
         private int _weekNumber = 0;
+        public int WeekNumber
+        {
+            get => _weekNumber;
+            set => SetProperty(ref _weekNumber, value);
+        }
+
         private Semana? _semanaActual;
         public Semana? SemanaActual
         {
             get => _semanaActual;
             set
             {
-                if (_semanaActual != value)
+                if (SetProperty(ref _semanaActual, value))
                 {
-                    _semanaActual = value;
-                    OnPropertyChanged(nameof(SemanaActual));
+                    // Notificamos que las propiedades dependientes también cambiaron
                     OnPropertyChanged(nameof(IsVisibleAsignacionMejoresMaestros3));
                     OnPropertyChanged(nameof(IsVisibleAsignacionMejoresMaestros4));
                     OnPropertyChanged(nameof(IsVisibleAsignacionVidaCristiana2));
@@ -41,34 +37,26 @@ namespace AppVidaMinisterio.ViewModels
             }
         }
 
-        public bool IsVisibleAsignacionMejoresMaestros3 => !string.IsNullOrEmpty(SemanaActual?.MejoresMaestros.Asignacion3);
-        public bool IsVisibleAsignacionMejoresMaestros4 => !string.IsNullOrEmpty(SemanaActual?.MejoresMaestros.Asignacion4);
-        public bool IsVisibleAsignacionVidaCristiana2 => !string.IsNullOrEmpty(SemanaActual?.VidaCristiana.Asignacion2);
+        public bool IsVisibleAsignacionMejoresMaestros3 =>
+            !string.IsNullOrEmpty(SemanaActual?.MejoresMaestros.Asignacion3);
+        public bool IsVisibleAsignacionMejoresMaestros4 =>
+            !string.IsNullOrEmpty(SemanaActual?.MejoresMaestros.Asignacion4);
+        public bool IsVisibleAsignacionVidaCristiana2 =>
+            !string.IsNullOrEmpty(SemanaActual?.VidaCristiana.Asignacion2);
 
         // Propiedades para animaciones
         private bool _isLoading;
         public bool IsLoading
         {
             get => _isLoading;
-            set
-            {
-                _isLoading = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _isLoading, value);
         }
-        public bool IsNotLoading => !IsLoading;
 
+        public bool IsNotLoading => !IsLoading;
+        
         // Constructores 
         public MainViewModel()
         {
-            SiguienteComand = new Command(NextWeek);
-            AnteriorComand = new Command(PreviousWeek);
-            GuardarComand = new Command(SaveJson);
-            GeneratePdfComand = new Command(PdfGenerator);
-            NewWeeksComand = new Command(async () => await GetNewWeeksAsync());
-            DeleteWeeksComand = new Command(DeleteOldWeeks);
-            // Es necesario? Tal vez solo para pruebas
-            LoadDataCommand = new Command(async () => await LoadDataAsync());
         }
 
         public async Task InitializeAsync()
@@ -78,17 +66,17 @@ namespace AppVidaMinisterio.ViewModels
             {
                 IsLoading = true;
                 var getWeeksService = new GetWeeksService();
-                _weekNumber = getWeeksService.GetCurrentDate();
+                WeekNumber = getWeeksService.GetCurrentDate();
                 if (!File.Exists(dataStorageService.PathStorage))
                 {
                     weeks = await getWeeksService.GetWeeks();
                     SaveJson();
-                    SemanaActual = weeks[_weekNumber];
+                    SemanaActual = weeks[WeekNumber];
                 }
                 else
                 {
                     weeks = await dataStorageService.ReadJsonAsync();
-                    SemanaActual = weeks[_weekNumber];
+                    SemanaActual = weeks[WeekNumber];
                 }
             }
             finally
@@ -98,47 +86,56 @@ namespace AppVidaMinisterio.ViewModels
         }
 
         // Métodos para las semanas
+        [RelayCommand]
         private void NextWeek()
         {
-            _weekNumber++;
+            WeekNumber++;
             SaveJson();
-            if (_weekNumber % 100 == 53)
+            if (WeekNumber % 100 == 53)
             {
-                _weekNumber += 48;
-                if (!weeks.ContainsKey(_weekNumber))
-                    _weekNumber -= 49;
+                WeekNumber += 48;
+                if (!weeks.ContainsKey(WeekNumber))
+                    WeekNumber -= 49;
                 else
-                    SemanaActual = weeks[_weekNumber];
+                    WeakReferenceMessenger.Default.Send(new AnimationMessage("ButtonPrevious"));
             }
-            if (!weeks.ContainsKey(_weekNumber))
-                _weekNumber--;
+            else if (!weeks.ContainsKey(WeekNumber))
+                WeekNumber--;
             else
-                SemanaActual = weeks[_weekNumber];
+                WeakReferenceMessenger.Default.Send(new AnimationMessage("ButtonNext"));
         }
 
+        [RelayCommand]
         private void PreviousWeek()
         {
-            _weekNumber--;
+            WeekNumber--;
             SaveJson();
-            if (_weekNumber % 100 == 00)
+            if (WeekNumber % 100 == 00)
             {
-                _weekNumber -= 48;
-                if (!weeks.ContainsKey(_weekNumber))
-                    _weekNumber += 49;
+                WeekNumber -= 48;
+                if (!weeks.ContainsKey(WeekNumber))
+                    WeekNumber += 49;
                 else
-                    SemanaActual = weeks[_weekNumber];
+                    WeakReferenceMessenger.Default.Send(new AnimationMessage("ButtonPrevious"));
             }
-            if (!weeks.ContainsKey(_weekNumber))
-                _weekNumber++;
+            else if (!weeks.ContainsKey(WeekNumber))
+                WeekNumber++;
             else
-                SemanaActual = weeks[_weekNumber];
+                WeakReferenceMessenger.Default.Send(new AnimationMessage("ButtonPrevious"));
         }
 
+        public void UpdateWeekAfterAnimation()
+        {
+            SemanaActual = weeks[WeekNumber];
+        }
+
+        [RelayCommand]
         private void SaveJson()
         {
             dataStorageService.SaveJson(weeks);
         }
 
+        [RelayCommand]
         private void PdfGenerator()
         {
             if (SemanaActual != null)
@@ -147,6 +144,7 @@ namespace AppVidaMinisterio.ViewModels
             }
         }
 
+        [RelayCommand]
         private async Task GetNewWeeksAsync()
         {
             try
@@ -162,6 +160,7 @@ namespace AppVidaMinisterio.ViewModels
             }
         }
 
+        [RelayCommand]
         private void DeleteOldWeeks()
         {
             // Metodo para borrar las semanas anteriores a la actual
@@ -181,18 +180,13 @@ namespace AppVidaMinisterio.ViewModels
             }
         }
 
+        [RelayCommand]
         private async Task LoadDataAsync()
         {
             // Es necesario? NO ES NECESARIO ES SOLO PARA PRUEBAS
             IsLoading = true;
             await Task.Delay(3000);
             IsLoading = false;
-        }
-
-        // Metodos para el Data Binding
-        protected virtual void OnPropertyChanged(string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
