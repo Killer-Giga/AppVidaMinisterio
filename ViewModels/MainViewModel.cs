@@ -49,7 +49,13 @@ namespace AppVidaMinisterio.ViewModels
         public bool IsLoading
         {
             get => _isLoading;
-            set => SetProperty(ref _isLoading, value);
+            set
+            {
+                if (SetProperty(ref _isLoading, value))
+                {
+                    OnPropertyChanged(nameof(IsNotLoading));
+                };
+            }
         }
 
         public bool IsNotLoading => !IsLoading;

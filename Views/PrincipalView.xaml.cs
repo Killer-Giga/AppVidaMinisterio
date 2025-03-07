@@ -51,13 +51,16 @@ public partial class PrincipalView : ContentPage
 
     private async Task AnimateGrid()
     {
+        // Desvanecemos los elementos
         var fadeOutTasks = MyGrid.Children
         .Select(child =>
         {
+            if (child == borderSkip)
+                return labelSemana.FadeTo(0, 200);
+            if (child is Border)
+                return Task.CompletedTask;
             if (child != borderSkip && child is VisualElement ve)
                 return ve.FadeTo(0, 200);
-            else if (child == borderSkip)
-                return labelSemana.FadeTo(0, 200);
             else
                 return Task.CompletedTask;
         })
@@ -70,13 +73,16 @@ public partial class PrincipalView : ContentPage
             vm.UpdateWeekAfterAnimation(); // Método que actualiza SemanaActual
         }
 
+        // Mostramos los elementos
         var fadeInTasks = MyGrid.Children
         .Select(child =>
         {
+            if (child == borderSkip)
+                return labelSemana.FadeTo(1, 200);
+            if (child is Border)
+                return Task.CompletedTask;
             if (child != borderSkip && child is VisualElement ve)
                 return ve.FadeTo(1, 200);
-            else if (child == borderSkip)
-                return labelSemana.FadeTo(1, 200);
             else
                 return Task.CompletedTask;
         })

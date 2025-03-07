@@ -27,11 +27,6 @@
 
     <ScrollView>
         <Grid x:Name="MyGrid" RowDefinitions="auto, auto, 30, auto, 30, auto, 30, auto, auto" ColumnDefinitions="auto,*,*">
-            <Grid.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="IsVisible" Value="{Binding IsNotLoading}"/>
-                </Style>
-            </Grid.Resources>
 
             <Border x:Name="borderSkip" BackgroundColor="{AppThemeBinding Dark={StaticResource PrimaryDark}, Light={StaticResource Primary}}" 
                     Stroke="{AppThemeBinding Dark={StaticResource Primary}, Light={StaticResource PrimaryDark}}" 
@@ -40,7 +35,7 @@
                     <RoundRectangle CornerRadius="40,40,40,40"/>
                 </Border.StrokeShape>
 
-                <Grid IsVisible="{Binding IsNotLoading}" ColumnDefinitions="*,auto,*" Margin="0">
+                <Grid ColumnDefinitions="*,auto,*" Margin="0">
                     <Grid.Resources>
                         <Style TargetType="Button">
                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource Primary}, Light={StaticResource PrimaryDark}}"/>
@@ -67,8 +62,7 @@
                   ColumnDefinitions="*,*"
                   Grid.Row="1" 
                   Grid.Column="0"
-                  Grid.ColumnSpan="3"
-                  IsVisible="{Binding IsNotLoading}">
+                  Grid.ColumnSpan="3">
 
                 <Entry Text="{Binding SemanaActual.Presidente}"
                        Placeholder="Presidente: "
@@ -91,7 +85,7 @@
             </Grid>
 
             <!-- Tesoros de la Biblia -->
-            <Border Grid.Row="2" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource TesorosDark}, Light={StaticResource TesorosLight}}">
+            <Border x:Name="borderTesoros" Grid.Row="2" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource TesorosDark}, Light={StaticResource TesorosLight}}">
                 <Grid Margin="0">
                     <Image Source="tesoros.png" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             TESOROS DE LA BIBLIA" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
@@ -102,8 +96,7 @@
                   ColumnDefinitions="*,*,*"
                   Grid.Row="3"
                   Grid.Column="0"
-                  Grid.ColumnSpan="3"
-                  IsVisible="{Binding IsNotLoading}">
+                  Grid.ColumnSpan="3">
                 <Grid.Resources>
                     <Style TargetType="Label">
                         <Setter Property="FontAttributes" Value="Bold"/>
@@ -131,7 +124,7 @@
             </Grid>
 
             <!-- Seamos Mejores Maestros -->
-            <Border Grid.Row="4" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}">
+            <Border x:Name="borderMejoresMaestros" Grid.Row="4" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}">
                 <Grid Margin="0">
                     <Image Source="seamos_mejores_maestros.png" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             SEAMOS MEJORES MAESTROS" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
@@ -142,8 +135,7 @@
                   ColumnDefinitions="*,*,*"
                   Grid.Row="5"
                   Grid.Column="0"
-                  Grid.ColumnSpan="3"
-                  IsVisible="{Binding IsNotLoading}">
+                  Grid.ColumnSpan="3">
                 <Grid.Resources>
                     <Style TargetType="Label">
                         <Setter Property="FontAttributes" Value="Bold"/>
@@ -177,7 +169,7 @@
             </Grid>
 
             <!-- Nuestra Vida Cristiana -->
-            <Border Grid.Row="6" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}">
+            <Border x:Name="borderVidaCristiana" Grid.Row="6" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}">
                 <Grid Margin="0">
                     <Image Source="nuestra_vida_cristiana.png" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             NUESTRA VIDA CRISTIANA" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
@@ -188,8 +180,7 @@
                   ColumnDefinitions="*,*,*"
                   Grid.Row="7"
                   Grid.Column="0"
-                  Grid.ColumnSpan="3"
-                  IsVisible="{Binding IsNotLoading}">
+                  Grid.ColumnSpan="3">
                 <Grid.Resources>
                     <Style TargetType="Label">
                         <Setter Property="FontAttributes" Value="Bold"/>
@@ -240,21 +231,17 @@
                   RowDefinitions="*,*,*"
                   ColumnDefinitions="*,*,*"
                   Grid.ColumnSpan="3"
+                  Grid.RowSpan="9"
                   Grid.Row="0"
                   Grid.Column="0"
-                  AbsoluteLayout.LayoutBounds="1,1,1,1"
+                  AbsoluteLayout.LayoutBounds="0,0,1,1"
                   AbsoluteLayout.LayoutFlags="All">
                 <ActivityIndicator IsRunning="True"
                          VerticalOptions="Center"
                          HorizontalOptions="Center"
-                         Grid.Row="1"
-                         Grid.Column="1"
+                         Grid.RowSpan="3"
+                         Grid.ColumnSpan="3"
                          Color="White"/>
-                <Label Text="Cargando"
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center"
-                        Grid.Row="0"
-                        Grid.Column="1"/>
             </Grid>
             
         </Grid>
