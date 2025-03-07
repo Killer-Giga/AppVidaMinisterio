@@ -9,7 +9,6 @@ namespace AppVidaMinisterio
         {
             InitializeComponent();
             BindingContext = viewModel;
-            Routing.RegisterRoute(nameof(PrincipalView), typeof(PrincipalView));
         }
     }
 }

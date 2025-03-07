@@ -4,18 +4,43 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:AppVidaMinisterio.Views"
-    Shell.FlyoutBehavior="Flyout"
+    xmlns:viewModels="clr-namespace:AppVidaMinisterio.ViewModels"
+    x:DataType="viewModels:MainViewModel"
+    Shell.FlyoutBehavior="Disabled"
     Title="AppVidaMinisterio">
 
+    <Shell.Resources>
+        <Style TargetType="Element">
+            <Setter Property="Shell.ForegroundColor" Value="{StaticResource JwLibrary}"/>
+            <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Dark={StaticResource JwLibrary}, Light={StaticResource JwLibraryText}}"/>
+        </Style>
+    </Shell.Resources>
+
     <Shell.FlyoutHeader>
-        <Grid HeightRequest="100"
-              BackgroundColor="Black">
-            <Image Source="dotnet_bot.png"/>
+        <Grid HeightRequest="50"
+              BackgroundColor="{AppThemeBinding Dark={StaticResource JwLibrary}, Light={StaticResource JwLibraryText}}">
+            <Grid ColumnDefinitions="*,*,*">
+                <Image Source="tesoros.png" Grid.Column="0"/>
+                <Image Source="seamos_mejores_maestros.png" Grid.Column="1"/>
+                <Image Source="nuestra_vida_cristiana.png" Grid.Column="2"/>
+            </Grid>
         </Grid>
     </Shell.FlyoutHeader>
 
-   
+    <Shell.TitleView >
+        <ScrollView Orientation="Horizontal">
+            <StackLayout Orientation="Horizontal" Spacing="10" Padding="5">
+                <Label Text="Rol Vida Ministerio" FontSize="25" 
+                       TextColor="{AppThemeBinding Dark={StaticResource JwLibraryText}, Light={StaticResource JwLibrary}}" 
+                       IsVisible="{Binding IsNotLoading}"/>
+                <!-- Animacion de estas imagenes al cargar algo PENDIENTE!!! -->
+                <Image x:Name="tesorosImage" Source="tesoros.png" Grid.Column="0" IsVisible="{Binding IsLoading}"/>
+                <Image x:Name="mejoresMaestrosImage" Source="seamos_mejores_maestros.png" Grid.Column="1" IsVisible="{Binding IsLoading}"/>
+                <Image x:Name="vidaCristianaImage" Source="nuestra_vida_cristiana.png" Grid.Column="2" IsVisible="{Binding IsLoading}"/>
+            </StackLayout>
+        </ScrollView>
+    </Shell.TitleView>
 
-    <ShellContent Title="Semana Actual"
+    <ShellContent Title="Semana"
                   ContentTemplate="{DataTemplate local:PrincipalView}"/>
 </Shell>
