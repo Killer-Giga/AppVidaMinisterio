@@ -20,23 +20,26 @@
         <Grid HeightRequest="50"
               BackgroundColor="{AppThemeBinding Dark={StaticResource JwLibrary}, Light={StaticResource JwLibraryText}}">
             <Grid ColumnDefinitions="*,*,*">
-                <Image Source="tesoros.png" Grid.Column="0"/>
-                <Image Source="seamos_mejores_maestros.png" Grid.Column="1"/>
-                <Image Source="nuestra_vida_cristiana.png" Grid.Column="2"/>
+                <Image Source="tesoros_de_la_biblia_grande.jpg" Grid.Column="0"/>
+                <Image Source="seamos_mejores_maestros_grande.jpg" Grid.Column="1"/>
+                <Image Source="nuestra_vida_cristiana_grande.jpg" Grid.Column="2"/>
             </Grid>
         </Grid>
     </Shell.FlyoutHeader>
 
     <Shell.TitleView >
-        <ScrollView Orientation="Horizontal">
+        <ScrollView Orientation="Horizontal"
+                   >
             <StackLayout Orientation="Horizontal" Spacing="10" Padding="5">
                 <Label Text="Rol Vida Ministerio" FontSize="25" 
                        TextColor="{AppThemeBinding Dark={StaticResource JwLibraryText}, Light={StaticResource JwLibrary}}" 
                        IsVisible="{Binding IsNotLoading}"/>
-                <!-- Animacion de estas imagenes al cargar algo PENDIENTE!!! -->
-                <Image x:Name="tesorosImage" Source="tesoros.png" Grid.Column="0" IsVisible="{Binding IsLoading}"/>
-                <Image x:Name="mejoresMaestrosImage" Source="seamos_mejores_maestros.png" Grid.Column="1" IsVisible="{Binding IsLoading}"/>
-                <Image x:Name="vidaCristianaImage" Source="nuestra_vida_cristiana.png" Grid.Column="2" IsVisible="{Binding IsLoading}"/>
+                <Image x:Name="tesorosImage" Source="tesoros_de_la_biblia_grande.jpg"  
+                       WidthRequest="50" HeightRequest="50" Aspect="AspectFit"  Grid.Column="0" IsVisible="{Binding IsLoading}"/>
+                <Image x:Name="mejoresMaestrosImage" Source="seamos_mejores_maestros_grande.jpg" 
+                       WidthRequest="50" HeightRequest="50" Aspect="AspectFit" Grid.Column="1" IsVisible="{Binding IsLoading}"/>
+                <Image x:Name="vidaCristianaImage" Source="nuestra_vida_cristiana_grande.jpg"  
+                       WidthRequest="50" HeightRequest="50" Aspect="AspectFit" Grid.Column="2" IsVisible="{Binding IsLoading}"/>
             </StackLayout>
         </ScrollView>
     </Shell.TitleView>

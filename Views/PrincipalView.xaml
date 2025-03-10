@@ -19,7 +19,6 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Guardar" Command="{Binding SaveJsonCommand}" Order="Primary"/>
-        <ToolbarItem Text="Animacion" Command="{Binding LoadDataCommand}" Order="Primary"/>
         <ToolbarItem Text="Descargar Nuevas Semanas" Command="{Binding GetNewWeeksCommand}" Order="Secondary"/>
         <ToolbarItem Text="Borrar Semanas Pasadas" Command="{Binding DeleteOldWeeksCommand}" Order="Secondary"/>
         <ToolbarItem Text="Generar Pdf" Command="{Binding PdfGeneratorCommand}" Order="Secondary"/>
@@ -87,7 +86,7 @@
             <!-- Tesoros de la Biblia -->
             <Border x:Name="borderTesoros" Grid.Row="2" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource TesorosDark}, Light={StaticResource TesorosLight}}">
                 <Grid Margin="0">
-                    <Image Source="tesoros.png" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Image Source="tesoros_de_la_biblia_grande.jpg" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             TESOROS DE LA BIBLIA" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
                 </Grid>
             </Border>
@@ -126,7 +125,7 @@
             <!-- Seamos Mejores Maestros -->
             <Border x:Name="borderMejoresMaestros" Grid.Row="4" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}">
                 <Grid Margin="0">
-                    <Image Source="seamos_mejores_maestros.png" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Image Source="seamos_mejores_maestros_grande.jpg" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             SEAMOS MEJORES MAESTROS" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
                 </Grid>
             </Border>
@@ -171,7 +170,7 @@
             <!-- Nuestra Vida Cristiana -->
             <Border x:Name="borderVidaCristiana" Grid.Row="6" WidthRequest="275" Stroke="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}">
                 <Grid Margin="0">
-                    <Image Source="nuestra_vida_cristiana.png" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <Image Source="nuestra_vida_cristiana_grande.jpg" HorizontalOptions="Start" VerticalOptions="Center"/>
                     <Label Text="             NUESTRA VIDA CRISTIANA" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="Center"/>
                 </Grid>
             </Border>
@@ -196,8 +195,10 @@
                 <Entry x:Name="asignadoVidaCristiana1" Text="{Binding SemanaActual.VidaCristiana.Asignado1}" Grid.Row="1" Grid.Column="2"/>
 
                 <Grid Grid.Row="2" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2" IsVisible="{Binding IsVisibleAsignacionVidaCristiana2}">
-                    <Label x:Name="asignacionVidaCristiana2" Text="{Binding SemanaActual.VidaCristiana.Asignacion2}" TextColor="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}" Grid.Row="0" LineBreakMode="TailTruncation"/>
-                    <Label Text="{Binding SemanaActual.VidaCristiana.Detalles2}" FontAttributes="None" FontSize="Caption" Grid.Row="1"/>
+                    <Label x:Name="asignacionVidaCristiana2" Text="{Binding SemanaActual.VidaCristiana.Asignacion2}" TextColor="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}"
+                           Grid.Row="0" LineBreakMode="TailTruncation"/>
+                    <Label Text="{Binding SemanaActual.VidaCristiana.Detalles2}" FontAttributes="None" FontSize="Caption" 
+                           Grid.Row="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Entry x:Name="asignadoVidaCristiana2" Text="{Binding SemanaActual.VidaCristiana.Asignado2}" IsVisible="{Binding IsVisibleAsignacionVidaCristiana2}" Grid.Row="2" Grid.Column="2"/>
 
@@ -226,7 +227,7 @@
                        Grid.Column="2"/>
             </Grid>
             
-            <!-- Overlay de carga PENDIENTE DE TERMINAR-->
+            <!-- Overlay de carga -->
             <Grid BackgroundColor="#80000000" IsVisible="{Binding IsLoading}"
                   RowDefinitions="*,*,*"
                   ColumnDefinitions="*,*,*"

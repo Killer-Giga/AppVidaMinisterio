@@ -185,14 +185,5 @@ namespace AppVidaMinisterio.ViewModels
                 weeks.Remove(key);
             }
         }
-
-        [RelayCommand]
-        private async Task LoadDataAsync()
-        {
-            // Es necesario? NO ES NECESARIO ES SOLO PARA PRUEBAS
-            IsLoading = true;
-            await Task.Delay(3000);
-            IsLoading = false;
-        }
     }
 }
