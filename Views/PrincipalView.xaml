@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:AppVidaMinisterio.ViewModels"
+             xmlns:converter="clr-namespace:AppVidaMinisterio.Converters"
              x:Class="AppVidaMinisterio.Views.PrincipalView"
              x:DataType="viewModels:MainViewModel"
              Title="Rol Vida y Ministerio">
@@ -14,6 +15,8 @@
             <Color x:Key="TesorosDeLaBiblia">#FF3C7F8B</Color>
             <Color x:Key="SeamosMejoresMaestros">#FFD68F00</Color>
             <Color x:Key="NuestraVidaCristiana">#FFBF2F13</Color>
+            <!--Necesario par cambiar de true a false y viceversa en el binding-->
+            <converter:InvertBoolConverter x:Key="InvertBool"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -22,6 +25,8 @@
         <ToolbarItem Text="Descargar Nuevas Semanas" Command="{Binding GetNewWeeksCommand}" Order="Secondary"/>
         <ToolbarItem Text="Borrar Semanas Pasadas" Command="{Binding DeleteOldWeeksCommand}" Order="Secondary"/>
         <ToolbarItem Text="Generar Pdf" Command="{Binding PdfGeneratorCommand}" Order="Secondary"/>
+        <ToolbarItem Text="Semana de la Visita" Command="{Binding ChangeByVisitCommand}" Order="Secondary"/>
+        <ToolbarItem Text="Semana con el informe" Command="{Binding ChangeByUpdateCommand}" Order="Secondary"/>
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -189,8 +194,12 @@
                 <Label x:Name="cancionIntermedio" FontAttributes="None" Text="{Binding SemanaActual.Cancion.Intermedio}" Grid.Row="0"/>
 
                 <Grid Grid.Row="1" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Label x:Name="asignacionVidaCristiana1" Text="{Binding SemanaActual.VidaCristiana.Asignacion1}" TextColor="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}" Grid.Row="0" LineBreakMode="TailTruncation"/>
-                    <Label Text="{Binding SemanaActual.VidaCristiana.Detalles1}" FontAttributes="None" FontSize="Caption" Grid.Row="1"/>
+                    <Label x:Name="asignacionVidaCristiana1" Text="{Binding SemanaActual.VidaCristiana.Asignacion1}" TextColor="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}" 
+                           Grid.Row="0" LineBreakMode="TailTruncation"
+                           IsVisible="{Binding IsVisibleIsUpdate, Converter={StaticResource InvertBool}, ConverterParameter=Invert}"/>
+                    <Label Text="{Binding SemanaActual.VidaCristiana.Detalles1}" FontAttributes="None" FontSize="Caption" Grid.Row="1"
+                           IsVisible="{Binding IsVisibleIsUpdate, Converter={StaticResource InvertBool}, ConverterParameter=Invert}"/>
+                    <Entry x:Name="videoInforme" Text="{Binding SemanaActual.VideoInforme}" Placeholder="Informe"  IsVisible="{Binding IsVisibleIsUpdate}"/>
                 </Grid>
                 <Entry x:Name="asignadoVidaCristiana1" Text="{Binding SemanaActual.VidaCristiana.Asignado1}" Grid.Row="1" Grid.Column="2"/>
 
@@ -203,8 +212,13 @@
                 <Entry x:Name="asignadoVidaCristiana2" Text="{Binding SemanaActual.VidaCristiana.Asignado2}" IsVisible="{Binding IsVisibleAsignacionVidaCristiana2}" Grid.Row="2" Grid.Column="2"/>
 
                 <Grid Grid.Row="3" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Label x:Name="estudioBilico" Text="{Binding SemanaActual.VidaCristiana.EstudioBiblico}" TextColor="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}" Grid.Row="0"/>
-                    <Label Text="{Binding SemanaActual.VidaCristiana.DetallesEstudioBiblico}" FontAttributes="None" FontSize="Caption" Grid.Row="1" LineBreakMode="TailTruncation"/>
+                    <Label x:Name="estudioBilico" Text="{Binding SemanaActual.VidaCristiana.EstudioBiblico}" 
+                           TextColor="{AppThemeBinding Dark={StaticResource VidaCristianaDark}, Light={StaticResource VidaCristianaLight}}" Grid.Row="0"
+                           IsVisible="{Binding IsVisibleIsVisit, Converter={StaticResource InvertBool}, ConverterParameter=Invert}"/>
+                    <Label Text="{Binding SemanaActual.VidaCristiana.DetallesEstudioBiblico}" 
+                           FontAttributes="None" FontSize="Caption" Grid.Row="1" LineBreakMode="TailTruncation"
+                           IsVisible="{Binding IsVisibleIsVisit, Converter={StaticResource InvertBool}, ConverterParameter=Invert}"/>
+                    <Entry x:Name="discursoVisita" Text="{Binding SemanaActual.DiscursoVisita}" Placeholder="Discurso de la Visita"  IsVisible="{Binding IsVisibleIsVisit}"/>
                 </Grid>
                 <Editor x:Name="conductorEstudioBiblico" Placeholder="Conductor:&#x0a;Lector:" Text="{Binding SemanaActual.VidaCristiana.ConductorYLectorEstudioBiblico}" AutoSize="TextChanges" Grid.Row="3" Grid.Column="2"/>
             </Grid>

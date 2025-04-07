@@ -22,6 +22,7 @@ namespace AppVidaMinisterio
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            // Inyección de dependencias
             builder.Services.AddSingleton<MainViewModel>();
 
             // Registra las páginas

@@ -104,15 +104,32 @@ namespace AppVidaMinisterio.Services.PdfTemplates
                  table.Cell().ColumnSpan(2).Element(CellStyle).Text(Week.Cancion.Intermedio);
                  table.Cell().ColumnSpan(2).Padding(-4).Text("");
 
-                 table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.Asignacion1}\n{Week.VidaCristiana.Detalles1}");
-                 table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.Asignado1}");
-                 if (!string.IsNullOrEmpty(Week.VidaCristiana.Asignacion2))
+                 if (Week.IsUpdate)
                  {
-                     table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.Asignacion2}\n{Week.VidaCristiana.Detalles2}");
-                     table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.Asignado2}");
+                     table.Cell().Element(CellStyle).Text($"{Week.VideoInforme}");
+                     table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.Asignado1}");
                  }
-                 table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.EstudioBiblico}\n{Week.VidaCristiana.DetallesEstudioBiblico}");
-                 table.Cell().Element(CellStyle).Text(ChangeString(Week.VidaCristiana.ConductorYLectorEstudioBiblico));
+                 else
+                 {
+                     table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.Asignacion1}\n{Week.VidaCristiana.Detalles1}");
+                     table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.Asignado1}");
+                     if (!string.IsNullOrEmpty(Week.VidaCristiana.Asignacion2))
+                     {
+                         table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.Asignacion2}\n{Week.VidaCristiana.Detalles2}");
+                         table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.Asignado2}");
+                     }
+                 }
+
+                 if (Week.IsVisit)
+                 {
+                     table.Cell().Element(CellStyle).Text($"{Week.DiscursoVisita}");
+                     table.Cell().Element(CellStyle).Text(ChangeString(Week.VidaCristiana.ConductorYLectorEstudioBiblico));
+                 }
+                 else
+                 {
+                     table.Cell().Element(CellStyle).Text($"{Week.VidaCristiana.EstudioBiblico}\n{Week.VidaCristiana.DetallesEstudioBiblico}");
+                     table.Cell().Element(CellStyle).Text(ChangeString(Week.VidaCristiana.ConductorYLectorEstudioBiblico));
+                 }
 
                  static IContainer CellStyle(IContainer container)
                      => container.Padding(5);

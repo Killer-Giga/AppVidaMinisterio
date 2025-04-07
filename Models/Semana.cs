@@ -5,6 +5,10 @@
         public string? SemanaFecha { get; set; }
         public string? TextoBiblico { get; set; }  
         public string? Presidente { get; set; } = "Presidente: ";
+        public bool IsVisit { get; set; } = false; // Indica si la semana es visita del Superintendente de circuito
+        public string? DiscursoVisita { get; set; }
+        public bool IsUpdate { get; set; } = false; // Indica si en la semana se pone el informe del cuerpo gobernante
+        public string? VideoInforme { get; set; }
 
         public Canciones Cancion { get; init; }
         public Oradores Orador { get; init; }
@@ -63,7 +67,7 @@
             public string? Asignado4 { get; set; }
             public string? Detalles4 { get; set; }
         }
-        
+
         public class NuestraVidaCristiana
         {
             public string? Asignacion1 { get; set; }

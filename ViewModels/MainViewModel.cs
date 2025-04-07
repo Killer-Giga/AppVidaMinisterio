@@ -33,6 +33,7 @@ namespace AppVidaMinisterio.ViewModels
                     OnPropertyChanged(nameof(IsVisibleAsignacionMejoresMaestros3));
                     OnPropertyChanged(nameof(IsVisibleAsignacionMejoresMaestros4));
                     OnPropertyChanged(nameof(IsVisibleAsignacionVidaCristiana2));
+                    OnPropertyChanged(nameof(IsVisibleIsVisit));
                 }
             }
         }
@@ -43,6 +44,8 @@ namespace AppVidaMinisterio.ViewModels
             !string.IsNullOrEmpty(SemanaActual?.MejoresMaestros.Asignacion4);
         public bool IsVisibleAsignacionVidaCristiana2 =>
             !string.IsNullOrEmpty(SemanaActual?.VidaCristiana.Asignacion2);
+        public bool IsVisibleIsVisit => SemanaActual?.IsVisit ?? false;
+        public bool IsVisibleIsUpdate => SemanaActual?.IsUpdate ?? false;
 
         // Propiedades para animaciones
         private bool _isLoading;
@@ -183,6 +186,28 @@ namespace AppVidaMinisterio.ViewModels
             foreach (int key in keys)
             {
                 weeks.Remove(key);
+            }
+        }
+
+        [RelayCommand]
+        private void ChangeByVisit() 
+        { 
+            // Quita el estudio Biblico por el discurso de la visita
+            if (SemanaActual != null)
+            {
+                SemanaActual.IsVisit = !SemanaActual.IsVisit;
+                OnPropertyChanged(nameof(IsVisibleIsVisit));
+            }
+        }
+
+        [RelayCommand]
+        private void ChangeByUpdate()
+        {
+            // Cambia las asignaciones de vida crisitana por el informe del cuerpo gobernante
+            if (SemanaActual != null)
+            {
+                SemanaActual.IsUpdate = !SemanaActual.IsUpdate;
+                OnPropertyChanged(nameof(IsVisibleIsUpdate));
             }
         }
     }
