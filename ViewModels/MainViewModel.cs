@@ -34,6 +34,7 @@ namespace AppVidaMinisterio.ViewModels
                     OnPropertyChanged(nameof(IsVisibleAsignacionMejoresMaestros4));
                     OnPropertyChanged(nameof(IsVisibleAsignacionVidaCristiana2));
                     OnPropertyChanged(nameof(IsVisibleIsVisit));
+                    OnPropertyChanged(nameof(IsVisibleCleaningDuty));
                 }
             }
         }
@@ -46,6 +47,7 @@ namespace AppVidaMinisterio.ViewModels
             !string.IsNullOrEmpty(SemanaActual?.VidaCristiana.Asignacion2);
         public bool IsVisibleIsVisit => SemanaActual?.IsVisit ?? false;
         public bool IsVisibleIsUpdate => SemanaActual?.IsUpdate ?? false;
+        public bool IsVisibleCleaningDuty => SemanaActual?.CleaningDuty ?? false;
 
         // Propiedades para animaciones
         private bool _isLoading;
@@ -98,39 +100,29 @@ namespace AppVidaMinisterio.ViewModels
         [RelayCommand]
         private void NextWeek()
         {
-            WeekNumber++;
             SaveJson();
-            if (WeekNumber % 100 == 53)
+            var keys = weeks.Keys.ToList();
+            int index = keys.IndexOf(WeekNumber);
+
+            if (keys.Last() != WeekNumber)
             {
-                WeekNumber += 48;
-                if (!weeks.ContainsKey(WeekNumber))
-                    WeekNumber -= 49;
-                else
-                    WeakReferenceMessenger.Default.Send(new AnimationMessage("ButtonPrevious"));
-            }
-            else if (!weeks.ContainsKey(WeekNumber))
-                WeekNumber--;
-            else
+                WeekNumber = keys[index + 1]; // Siguiente
                 WeakReferenceMessenger.Default.Send(new AnimationMessage("ButtonNext"));
+            }
         }
 
         [RelayCommand]
         private void PreviousWeek()
         {
-            WeekNumber--;
             SaveJson();
-            if (WeekNumber % 100 == 00)
+            var keys = weeks.Keys.ToList();
+            int index = keys.IndexOf(WeekNumber);
+
+            if (index > 0)
             {
-                WeekNumber -= 48;
-                if (!weeks.ContainsKey(WeekNumber))
-                    WeekNumber += 49;
-                else
-                    WeakReferenceMessenger.Default.Send(new AnimationMessage("ButtonPrevious"));
+               WeekNumber = keys[index - 1]; // anterior
+               WeakReferenceMessenger.Default.Send(new AnimationMessage("ButtonPrevious"));
             }
-            else if (!weeks.ContainsKey(WeekNumber))
-                WeekNumber++;
-            else
-                WeakReferenceMessenger.Default.Send(new AnimationMessage("ButtonPrevious"));
         }
 
         public void UpdateWeekAfterAnimation()
@@ -208,6 +200,17 @@ namespace AppVidaMinisterio.ViewModels
             {
                 SemanaActual.IsUpdate = !SemanaActual.IsUpdate;
                 OnPropertyChanged(nameof(IsVisibleIsUpdate));
+            }
+        }
+
+        [RelayCommand]
+        private void ChangeCleaningDuty()
+        {
+            // Activa o desactiva el deber de limpieza
+            if (SemanaActual != null)
+            {
+                SemanaActual.CleaningDuty = !SemanaActual.CleaningDuty;
+                OnPropertyChanged(nameof(IsVisibleCleaningDuty));
             }
         }
     }

@@ -5,6 +5,7 @@ namespace AppVidaMinisterio.Services
 {
     internal class WebScrapingService
     {
+        // Cambiar a ingles. PROXIMAMENTE!!!
         // Esta clase llena al objeto Semana con la información obtenida de la url
         private enum Seccion
         {
@@ -25,28 +26,6 @@ namespace AppVidaMinisterio.Services
         {
             Semana = semana;
             Url = url;
-        }
-
-        public async Task<bool> HasValidContentAsync()
-        {
-            try
-            {
-                HttpResponseMessage response = await httpClient.GetAsync(Url);
-                response.EnsureSuccessStatusCode();
-                string htmlContent = await response.Content.ReadAsStringAsync();
-                var doc = new HtmlDocument();
-                doc.LoadHtml(htmlContent);
-                var h1Node = doc.DocumentNode.SelectSingleNode("//h1");
-                if (h1Node !=  null)
-                {
-                    return true;
-                }
-                return false;
-            }
-            catch (HttpRequestException)
-            {
-                return false;
-            }
         }
 
         public async Task WebScraping()
@@ -75,11 +54,11 @@ namespace AppVidaMinisterio.Services
             }
             catch (InvalidOperationException ex)
             {
-                throw new InvalidOperationException("Error: Web Scraping", ex);
+                throw new InvalidOperationException($"Error: Web Scraping, Url: {Url}", ex);
             }
             catch (HttpRequestException ex)
             {
-                throw new HttpRequestException("Error: Web Scraping", ex);
+                throw new HttpRequestException($"Error: Web Scraping, Url: {Url}", ex);
             }
         }
 
