@@ -27,6 +27,7 @@
         <ToolbarItem Text="Generar Pdf" Command="{Binding PdfGeneratorCommand}" Order="Secondary"/>
         <ToolbarItem Text="Semana de la Visita" Command="{Binding ChangeByVisitCommand}" Order="Secondary"/>
         <ToolbarItem Text="Semana con el informe" Command="{Binding ChangeByUpdateCommand}" Order="Secondary"/>
+        <ToolbarItem Text="Aseo por grupos" Command="{Binding ChangeCleaningDutyCommand}" Order="Secondary"/>
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -147,25 +148,25 @@
                 </Grid.Resources>
 
                 <Grid Grid.Row="0" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label x:Name="asignacionEstudiantil1" Text="{Binding SemanaActual.MejoresMaestros.Asignacion1}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" Grid.Row="0"/>
+                    <Label x:Name="asignacionEstudiantil1" Text="{Binding SemanaActual.MejoresMaestros.Asignacion1}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" Grid.Row="0"/>
                     <Label Text="{Binding SemanaActual.MejoresMaestros.Detalles1}" FontAttributes="None" FontSize="Caption" Grid.Row="1" MaxLines="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Editor x:Name="asinadoEstudiantil1" Text="{Binding SemanaActual.MejoresMaestros.Asignado1}" AutoSize="TextChanges" Grid.Row="0" Grid.Column="2"/>
 
                 <Grid Grid.Row="1" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label x:Name="asignacionEstudiantil2" Text="{Binding SemanaActual.MejoresMaestros.Asignacion2}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                    <Label x:Name="asignacionEstudiantil2" Text="{Binding SemanaActual.MejoresMaestros.Asignacion2}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
                     <Label Text="{Binding SemanaActual.MejoresMaestros.Detalles2}" FontAttributes="None" FontSize="Caption" Grid.Row="1" MaxLines="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Editor x:Name="asignadoEstudiantil2" Text="{Binding SemanaActual.MejoresMaestros.Asignado2}" AutoSize="TextChanges" Grid.Row="1" Grid.Column="2"/>
 
                 <Grid Grid.Row="2" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label x:Name="asignacionEstudiantil3" Text="{Binding SemanaActual.MejoresMaestros.Asignacion3}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros3}" Grid.Row="0"/>
+                    <Label x:Name="asignacionEstudiantil3" Text="{Binding SemanaActual.MejoresMaestros.Asignacion3}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros3}" Grid.Row="0"/>
                     <Label Text="{Binding SemanaActual.MejoresMaestros.Detalles3}" FontAttributes="None" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros3}" FontSize="Caption" Grid.Row="1" MaxLines="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Editor x:Name="asignadoEstudiantil3" Text="{Binding SemanaActual.MejoresMaestros.Asignado3}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros3}" AutoSize="TextChanges" Grid.Row="2" Grid.Column="2"/>
 
                 <Grid Grid.Row="3" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
-                <Label x:Name="asignacionEstudiantil4" Text="{Binding SemanaActual.MejoresMaestros.Asignacion4}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros4}" Grid.Row="0"/>
+                    <Label x:Name="asignacionEstudiantil4" Text="{Binding SemanaActual.MejoresMaestros.Asignacion4}" TextColor="{AppThemeBinding Dark={StaticResource MejoresMaestrosDark}, Light={StaticResource MejoresMaestrosLight}}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros4}" Grid.Row="0"/>
                     <Label Text="{Binding SemanaActual.MejoresMaestros.Detalles4}" FontAttributes="None" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros4}" FontSize="Caption" Grid.Row="1" MaxLines="1" LineBreakMode="TailTruncation"/>
                 </Grid>
                 <Editor x:Name="asignadoEstudiantil4" Text="{Binding SemanaActual.MejoresMaestros.Asignado4}" IsVisible="{Binding IsVisibleAsignacionMejoresMaestros4}" AutoSize="TextChanges" Grid.Row="3" Grid.Column="2"/>
@@ -190,7 +191,7 @@
                         <Setter Property="FontAttributes" Value="Bold"/>
                     </Style>
                 </Grid.Resources>
-                
+
                 <Label x:Name="cancionIntermedio" FontAttributes="None" Text="{Binding SemanaActual.Cancion.Intermedio}" Grid.Row="0"/>
 
                 <Grid Grid.Row="1" RowDefinitions="*,*" Grid.Column="0" Grid.ColumnSpan="2">
@@ -224,7 +225,7 @@
             </Grid>
 
             <Grid RowDefinitions="*" 
-                  ColumnDefinitions="*,*"
+                  ColumnDefinitions="*,*,*"
                   Grid.Row="8" 
                   Grid.Column="0"
                   Grid.ColumnSpan="3"
@@ -233,14 +234,21 @@
                 <Label x:Name="cancionFinal"
                        Text="{Binding SemanaActual.Cancion.Final}"
                        Grid.Row="0"/>
-
+                
+                <Entry x:Name="aseoGrupo"
+                        Text="{Binding SemanaActual.Grupos}"
+                        IsVisible= "{Binding IsVisibleCleaningDuty, Converter={StaticResource InvertBool}, ConverterParameter=Invert}"
+                        Placeholder="Aseo Grupos: "
+                        Grid.Row="0"
+                        Grid.Column="1"/>
+                
                 <Entry x:Name="oradorFinal"
                        Text="{Binding SemanaActual.Orador.Final}"
                        Placeholder="Oración final: "
                        Grid.Row="0"
                        Grid.Column="2"/>
             </Grid>
-            
+
             <!-- Overlay de carga -->
             <Grid BackgroundColor="#80000000" IsVisible="{Binding IsLoading}"
                   RowDefinitions="*,*,*"
@@ -258,7 +266,7 @@
                          Grid.ColumnSpan="3"
                          Color="White"/>
             </Grid>
-            
+
         </Grid>
     </ScrollView>
 </ContentPage>

@@ -153,9 +153,13 @@ namespace AppVidaMinisterio.Services.PdfTemplates
         {
             container.Row(row =>
             {
-                row.RelativeItem(2).Column(column =>
+                row.RelativeItem(1).Column(column =>
                 {
                     column.Item().Text(Week.Cancion.Final);
+                });
+                row.RelativeItem(1).Column(column =>
+                {
+                    column.Item().Text(Week.Grupos);
                 });
                 row.RelativeItem(1).Column(column =>
                 {

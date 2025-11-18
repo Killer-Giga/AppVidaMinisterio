@@ -9,6 +9,8 @@
         public string? DiscursoVisita { get; set; }
         public bool IsUpdate { get; set; } = false; // Indica si en la semana se pone el informe del cuerpo gobernante
         public string? VideoInforme { get; set; }
+        public bool CleaningDuty { get; set; } = true; // Indica si hay que hacer limpieza en el Salón del Reino
+        public string? Grupos { get; set; } = "Aseo Grupos: ";
 
         public Canciones Cancion { get; init; }
         public Oradores Orador { get; init; }
